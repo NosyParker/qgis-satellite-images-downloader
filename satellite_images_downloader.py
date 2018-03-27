@@ -72,6 +72,11 @@ class SatelliteImagesDownloader:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
+        self.dlg.lineEdit.clear()
+        self.dlg.lineEdit_2.clear()
+        self.dlg.lineEdit_3.clear()
+        self.dlg.lineEdit_4.clear()
+        self.dlg.pushButton.clicked.connect(self.print_selected_options)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -184,6 +189,19 @@ class SatelliteImagesDownloader:
         del self.toolbar
 
 
+    def print_selected_options(self):
+        SATTELITE_NAME = str(self.dlg.comboBox.currentText())
+        CLOUDS = str(self.dlg.spinBox.value())
+        DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
+        DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
+
+
+        self.dlg.lineEdit.setText(SATTELITE_NAME)
+        self.dlg.lineEdit_2.setText(CLOUDS)
+        self.dlg.lineEdit_3.setText(DATE_FROM)
+        self.dlg.lineEdit_4.setText(DATE_TO)
+
+
     def run(self):
         """Run method that performs all the real work"""
         # show the dialog
@@ -195,13 +213,4 @@ class SatelliteImagesDownloader:
         if result:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
-            SATTELITE_NAME = str(self.dlg.comboBox.currentText())
-            CLOUDS = str(self.dlg.spinBox.value)
-            DATE_FROM = str(self.dlg.dateEdit)
-            DATE_TO = str(self.dlg.dateEdit_2)
-
-
-            self.dlg.lineEdit.setText(SATTELITE_NAME)
-            self.dlg.lineEdit_2.setText(CLOUDS)
-            self.dlg.lineEdit_3.setText(DATE_FROM)
-            self.dlg.lineEdit_4.setText(DATE_TO)
+            pass
