@@ -30,7 +30,8 @@ from .resources import *
 # Import the code for the dialog
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
-
+from scene import Scenes
+from search import Search
 import os.path
 
 
@@ -72,11 +73,8 @@ class SatelliteImagesDownloader:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
-        self.dlg.lineEdit.clear()
-        self.dlg.lineEdit_2.clear()
-        self.dlg.lineEdit_3.clear()
-        self.dlg.lineEdit_4.clear()
-        self.dlg.pushButton.clicked.connect(self.print_selected_options)
+
+        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -195,17 +193,34 @@ class SatelliteImagesDownloader:
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
+        kwargs = {"satellite_name":SATTELITE_NAME, "clouds" : CLOUDS, 
+                "date_from":DATE_FROM, "date_to":DATE_TO}
+        self.dlg.satelliteName_lineEdit.setText(SATTELITE_NAME)
+        self.dlg.clouds_lineEdit.setText(CLOUDS)
+        self.dlg.dateFrom_lineEdit.setText(DATE_FROM)
+        self.dlg.dateTo_lineEdit.setText(DATE_TO)
 
-        self.dlg.lineEdit.setText(SATTELITE_NAME)
-        self.dlg.lineEdit_2.setText(CLOUDS)
-        self.dlg.lineEdit_3.setText(DATE_FROM)
-        self.dlg.lineEdit_4.setText(DATE_TO)
+        search = Search(kwargs)
+        scenes = Scenes(search.scenes())
+        self.dlg.finalScenes_lineEdit.setText(len(scenes))
 
+    # def print_searched_scenes(self, **kwargs):
+    #     SATTELITE_NAME = str(self.dlg.comboBox.currentText())
+    #     CLOUDS = str(self.dlg.spinBox.value())
+    #     DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
+    #     DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
+
+    #     search = Search(**kwargs)
+    #     scenes = Scenes(search.scenes())
+    #     self.dlg.finalScenes_lineEdit.setText(len(scenes))
 
     def run(self):
         """Run method that performs all the real work"""
         # show the dialog
-        
+        self.dlg.satelliteName_lineEdit.clear()
+        self.dlg.clouds_lineEdit.clear()
+        self.dlg.dateFrom_lineEdit.clear()
+        self.dlg.dateTo_lineEdit.clear()
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
