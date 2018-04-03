@@ -30,8 +30,9 @@ from .resources import *
 # Import the code for the dialog
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
-from scene import Scenes
-from search import Search
+from satsearch.search import Search
+from satsearch.scene import Scenes
+from satsearch.main import main
 import os.path
 
 
@@ -74,7 +75,7 @@ class SatelliteImagesDownloader:
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
 
-        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
+        
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -189,20 +190,22 @@ class SatelliteImagesDownloader:
 
     def print_selected_options(self):
         SATTELITE_NAME = str(self.dlg.comboBox.currentText())
-        CLOUDS = str(self.dlg.spinBox.value())
+        CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
+        CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        kwargs = {"satellite_name":SATTELITE_NAME, "clouds" : CLOUDS, 
+        argggs = {"satellite_name":SATTELITE_NAME, "cloud_from" : CLOUD_FROM, "cloud_to" : CLOUD_TO,
                 "date_from":DATE_FROM, "date_to":DATE_TO}
         self.dlg.satelliteName_lineEdit.setText(SATTELITE_NAME)
-        self.dlg.clouds_lineEdit.setText(CLOUDS)
+        self.dlg.cloudFrom_lineEdit.setText(CLOUD_FROM)
+        self.dlg.cloudTo_lineEdit.setText(CLOUD_TO)
         self.dlg.dateFrom_lineEdit.setText(DATE_FROM)
         self.dlg.dateTo_lineEdit.setText(DATE_TO)
 
-        search = Search(kwargs)
-        scenes = Scenes(search.scenes())
-        self.dlg.finalScenes_lineEdit.setText(len(scenes))
+
+        scenes = main(**argggs)
+        self.dlg.finalScenes_lineEdit.setText(str(len(scenes)))
 
     # def print_searched_scenes(self, **kwargs):
     #     SATTELITE_NAME = str(self.dlg.comboBox.currentText())
@@ -217,10 +220,11 @@ class SatelliteImagesDownloader:
     def run(self):
         """Run method that performs all the real work"""
         # show the dialog
-        self.dlg.satelliteName_lineEdit.clear()
-        self.dlg.clouds_lineEdit.clear()
-        self.dlg.dateFrom_lineEdit.clear()
-        self.dlg.dateTo_lineEdit.clear()
+        # self.dlg.satelliteName_lineEdit.clear()
+        # self.dlg.clouds_lineEdit.clear()
+        # self.dlg.dateFrom_lineEdit.clear()
+        # self.dlg.dateTo_lineEdit.clear()
+        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
