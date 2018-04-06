@@ -23,18 +23,19 @@
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
-
+from PyQt5.QtWidgets import QAction, QProgressBar
+from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
+import satsearch
 from satsearch.search import Search
 from satsearch.scene import Scenes
 from satsearch.main import main
 import os.path
-
+from.globals import SATELLITES
 
 class SatelliteImagesDownloader:
     """QGIS Plugin Implementation."""
@@ -74,7 +75,8 @@ class SatelliteImagesDownloader:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
-
+        self.add_satellites_combobox(SATELLITES)
+        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
         
 
     # noinspection PyMethodMayBeStatic
@@ -187,9 +189,12 @@ class SatelliteImagesDownloader:
         # remove the toolbar
         del self.toolbar
 
+    def add_satellites_combobox(self, satellites_list):
+        self.dlg.satelliteName_comboBox.addItems(satellites_list)
+
 
     def print_selected_options(self):
-        SATTELITE_NAME = str(self.dlg.comboBox.currentText())
+        SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
@@ -204,18 +209,11 @@ class SatelliteImagesDownloader:
         self.dlg.dateTo_lineEdit.setText(DATE_TO)
 
 
+        self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
         scenes = main(**argggs)
         self.dlg.finalScenes_lineEdit.setText(str(len(scenes)))
+        self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
 
-    # def print_searched_scenes(self, **kwargs):
-    #     SATTELITE_NAME = str(self.dlg.comboBox.currentText())
-    #     CLOUDS = str(self.dlg.spinBox.value())
-    #     DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
-    #     DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
-
-    #     search = Search(**kwargs)
-    #     scenes = Scenes(search.scenes())
-    #     self.dlg.finalScenes_lineEdit.setText(len(scenes))
 
     def run(self):
         """Run method that performs all the real work"""
@@ -224,7 +222,10 @@ class SatelliteImagesDownloader:
         # self.dlg.clouds_lineEdit.clear()
         # self.dlg.dateFrom_lineEdit.clear()
         # self.dlg.dateTo_lineEdit.clear()
-        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
+        
+
+        self.dlg.cloudTo_lineEdit.setText(os.path.abspath(satsearch.__file__))
+
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()

@@ -16,56 +16,21 @@
   <widget class="QPushButton" name="searchScenesButton">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>220</y>
-     <width>221</width>
-     <height>81</height>
+     <x>260</x>
+     <y>110</y>
+     <width>171</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="text">
-    <string>НАЙТИ СНИМКИ</string>
+    <string>Искать снимки</string>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>170</y>
-     <width>375</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите границу облачности:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QSpinBox" name="cloudFrom_spinBox">
-      <property name="minimumSize">
-       <size>
-        <width>111</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="value">
-       <number>40</number>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>120</y>
+     <y>40</y>
      <width>450</width>
      <height>22</height>
     </rect>
@@ -90,6 +55,16 @@
       <property name="wrapping">
        <bool>false</bool>
       </property>
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2018</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
@@ -104,42 +79,19 @@
     </item>
     <item>
      <widget class="QDateEdit" name="dateEdit_2">
+      <property name="dateTime">
+       <datetime>
+        <hour>0</hour>
+        <minute>0</minute>
+        <second>0</second>
+        <year>2018</year>
+        <month>1</month>
+        <day>1</day>
+       </datetime>
+      </property>
       <property name="calendarPopup">
        <bool>true</bool>
       </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>80</y>
-     <width>249</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QComboBox" name="comboBox">
-      <item>
-       <property name="text">
-        <string>Landsat-8</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Sentinel-2A</string>
-       </property>
-      </item>
      </widget>
     </item>
    </layout>
@@ -236,8 +188,8 @@
   <widget class="QLineEdit" name="finalScenes_lineEdit">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>580</y>
+     <x>360</x>
+     <y>180</y>
      <width>113</width>
      <height>20</height>
     </rect>
@@ -246,8 +198,8 @@
   <widget class="QLabel" name="label_11">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>580</y>
+     <x>20</x>
+     <y>180</y>
      <width>321</width>
      <height>16</height>
     </rect>
@@ -259,13 +211,16 @@
   <widget class="QSpinBox" name="cloudTo_spinBox">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>170</y>
+     <x>100</x>
+     <y>140</y>
      <width>111</width>
      <height>22</height>
     </rect>
    </property>
    <property name="maximum">
+    <number>100</number>
+   </property>
+   <property name="value">
     <number>100</number>
    </property>
   </widget>
@@ -277,6 +232,90 @@
      <width>113</width>
      <height>20</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>10</y>
+     <width>160</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="satelliteName_comboBox">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>10</y>
+     <width>131</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QSpinBox" name="cloudFrom_spinBox">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>110</y>
+     <width>111</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>111</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximum">
+    <number>100</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>80</y>
+     <width>301</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите границу облачности (%):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>110</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;от&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>140</y>
+     <width>47</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;до&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>
