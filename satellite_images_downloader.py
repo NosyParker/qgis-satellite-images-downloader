@@ -35,7 +35,9 @@ from satsearch.search import Search
 from satsearch.scene import Scenes
 from satsearch.main import main
 import os.path
-from.globals import SATELLITES
+from.globals import SATELLITES, KEYWORD_ARGS
+
+KWARGS = KEYWORD_ARGS
 
 class SatelliteImagesDownloader:
     """QGIS Plugin Implementation."""
@@ -76,7 +78,7 @@ class SatelliteImagesDownloader:
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
         self.add_satellites_combobox(SATELLITES)
-        self.dlg.searchScenesButton.clicked.connect(self.print_selected_options)
+        self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         
 
     # noinspection PyMethodMayBeStatic
@@ -192,19 +194,42 @@ class SatelliteImagesDownloader:
     def add_satellites_combobox(self, satellites_list):
         self.dlg.satelliteName_comboBox.addItems(satellites_list)
 
+    def checking_landsat8_category(self):
+        if self.dlg.categoryT1_checkBox.isChecked():
+            if "COLLECTION_CATEGORY" in KWARGS:
+                KWARGS["COLLECTION_CATEGORY"] += "T1,"
+            else:
+                KWARGS["COLLECTION_CATEGORY"] = "T1,"
+        if self.dlg.categoryT2_checkBox.isChecked():
+            if "COLLECTION_CATEGORY" in KWARGS:
+                KWARGS["COLLECTION_CATEGORY"] += "T2,"
+            else:
+                KWARGS["COLLECTION_CATEGORY"] = "T2,"
+        if self.dlg.categoryRT_checkBox.isChecked():
+            if "COLLECTION_CATEGORY" in KWARGS:
+                KWARGS["COLLECTION_CATEGORY"] += "RT,"
+            else:
+                KWARGS["COLLECTION_CATEGORY"] = "RT,"
 
-    def print_selected_options(self):
+    def finding_scenes(self):
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        argggs = {"satellite_name":SATTELITE_NAME, "cloud_from" : CLOUD_FROM, "cloud_to" : CLOUD_TO,
-                "date_from":DATE_FROM, "date_to":DATE_TO}
+        KWARGS["satellite_name"] = SATTELITE_NAME
+        KWARGS["cloud_from"] = CLOUD_FROM
+        KWARGS["cloud_to"] = CLOUD_TO
+        KWARGS["date_from"] = DATE_FROM
+        KWARGS["date_to"] = DATE_TO
+
+        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
+            self.checking_landsat8_category
 
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
-        scenes = main(**argggs)
+        
+        scenes = main(**KWARGS)
         self.dlg.finalScenes_lineEdit.setText(str(len(scenes)))
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
 
