@@ -202,12 +202,6 @@ class SatelliteImagesDownloader:
 
         argggs = {"satellite_name":SATTELITE_NAME, "cloud_from" : CLOUD_FROM, "cloud_to" : CLOUD_TO,
                 "date_from":DATE_FROM, "date_to":DATE_TO}
-        self.dlg.satelliteName_lineEdit.setText(SATTELITE_NAME)
-        self.dlg.cloudFrom_lineEdit.setText(CLOUD_FROM)
-        self.dlg.cloudTo_lineEdit.setText(CLOUD_TO)
-        self.dlg.dateFrom_lineEdit.setText(DATE_FROM)
-        self.dlg.dateTo_lineEdit.setText(DATE_TO)
-
 
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
         scenes = main(**argggs)
@@ -223,8 +217,6 @@ class SatelliteImagesDownloader:
         # self.dlg.dateFrom_lineEdit.clear()
         # self.dlg.dateTo_lineEdit.clear()
         
-
-        self.dlg.cloudTo_lineEdit.setText(os.path.abspath(satsearch.__file__))
 
         self.dlg.show()
         # Run the dialog event loop

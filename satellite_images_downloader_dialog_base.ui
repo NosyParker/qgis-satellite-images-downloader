@@ -6,316 +6,744 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>859</width>
-    <height>610</height>
+    <width>786</width>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Download Satellite Images</string>
   </property>
-  <widget class="QPushButton" name="searchScenesButton">
+  <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>110</y>
-     <width>171</width>
-     <height>51</height>
+     <x>0</x>
+     <y>0</y>
+     <width>781</width>
+     <height>401</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Искать снимки</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>40</y>
-     <width>450</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите требуемую дату:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;от&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QDateEdit" name="dateEdit">
-      <property name="wrapping">
-       <bool>false</bool>
-      </property>
-      <property name="dateTime">
-       <datetime>
-        <hour>0</hour>
-        <minute>0</minute>
-        <second>0</second>
-        <year>2018</year>
-        <month>1</month>
-        <day>1</day>
-       </datetime>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;до&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QDateEdit" name="dateEdit_2">
-      <property name="dateTime">
-       <datetime>
-        <hour>0</hour>
-        <minute>0</minute>
-        <second>0</second>
-        <year>2018</year>
-        <month>1</month>
-        <day>1</day>
-       </datetime>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>390</y>
-     <width>251</width>
-     <height>161</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QLineEdit" name="satelliteName_lineEdit"/>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="cloudFrom_lineEdit"/>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="dateFrom_lineEdit"/>
-    </item>
-    <item>
-     <widget class="QLineEdit" name="dateTo_lineEdit"/>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QLabel" name="label_6">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>350</y>
-     <width>281</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Поисковой запрос будет включать:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_7">
-   <property name="geometry">
-    <rect>
-     <x>190</x>
-     <y>400</y>
-     <width>81</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Спутник - &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_8">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>440</y>
-     <width>261</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; font-weight:600;&quot;&gt;Предельное значение облачности в % - &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_9">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>480</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Начальная дата - &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_10">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>520</y>
-     <width>131</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Конечная дата - &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="finalScenes_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>360</x>
-     <y>180</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>180</y>
-     <width>321</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;С указанными параметрами найдено снимков:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="cloudTo_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>140</y>
-     <width>111</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <property name="maximum">
-    <number>100</number>
-   </property>
-   <property name="value">
-    <number>100</number>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="cloudTo_lineEdit">
-   <property name="geometry">
-    <rect>
-     <x>560</x>
-     <y>440</y>
-     <width>113</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>10</y>
-     <width>160</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="satelliteName_comboBox">
-   <property name="geometry">
-    <rect>
-     <x>200</x>
-     <y>10</y>
-     <width>131</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="cloudFrom_spinBox">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>110</y>
-     <width>111</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>111</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximum">
-    <number>100</number>
-   </property>
-   <property name="value">
+   <property name="currentIndex">
     <number>0</number>
    </property>
+   <widget class="QWidget" name="seacrhFilters_Tab">
+    <attribute name="title">
+     <string>Поисковый фильтр</string>
+    </attribute>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>90</y>
+       <width>47</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;до&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>301</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите границы облачности (%):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="searchScenesButton">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>130</y>
+       <width>121</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Покажет количество снимков, доступным к загрузке при указанных параметрах&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Найти снимки</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="finalScenes_lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>300</x>
+       <y>220</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>160</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="satelliteName_comboBox">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>20</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>90</y>
+       <width>47</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;от&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="cloudFrom_spinBox">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>90</y>
+       <width>111</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>111</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>450</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите требуемую дату:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;от&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="dateEdit">
+        <property name="wrapping">
+         <bool>false</bool>
+        </property>
+        <property name="dateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2018</year>
+          <month>1</month>
+          <day>1</day>
+         </datetime>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;до&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="dateEdit_2">
+        <property name="dateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2018</year>
+          <month>1</month>
+          <day>1</day>
+         </datetime>
+        </property>
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QSpinBox" name="cloudTo_spinBox">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>90</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>190</y>
+       <width>321</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;С указанными параметрами найдено снимков:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="downloadScenesButton">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>250</y>
+       <width>191</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Загрузить все найденные снимки</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="downloadOptions_Tab">
+    <attribute name="title">
+     <string>Опции по загрузке</string>
+    </attribute>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>761</width>
+       <height>191</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Landsat-8: доступные файлы к загрузке и настройки</string>
+     </property>
+     <widget class="QCheckBox" name="L8B1_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,43-0,45&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B1: COASTAL AEROSOL</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B2_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>60</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,45-0,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B2: BLUE</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B3_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>100</y>
+        <width>81</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,53-0,59&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B3: GREEN</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B4_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,64-0,67&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B4: RED</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B5_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>20</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,85-0,88&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B5: NEAR INFRARED (NIR)</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B6_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>60</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,57-1,65&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B6: SHORTWAVE INFRARED (SWIR) 1</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B8_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>160</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;15м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,5-0,68&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B8: PANCHROMATIC</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B7_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>110</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 2,11-2,29&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B7: SHORTWAVE INFRARED (SWIR) 2</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B9_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>20</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,36-1,39&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B9: CIRRUS</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B10_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>60</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 10,60-11,19&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B10: THERMAL INFRARED (TIRS) 1</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8B11_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>110</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 11,50-12,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B11: THERMAL INFRARED (TIRS) 2</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="L8MTL_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>160</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Файл с доступными метаданными&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>MTL (METADATA)</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="categoryT1_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>60</y>
+        <width>74</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tier 1</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="categoryRT_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>120</y>
+        <width>114</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Real-Time</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="categoryT2_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>90</y>
+        <width>234</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Tier 2</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>20</y>
+        <width>141</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Категория снимков:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>210</y>
+       <width>761</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Sentinel-2: доступные файлы к загрузке</string>
+     </property>
+     <widget class="QCheckBox" name="S2B1_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,443&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B1: COASTAL AEROSOL</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B2_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,490&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B2: BLUE</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B3_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>110</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,560&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B3: GREEN</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B4_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,665&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B4: RED</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B5_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>190</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,705&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B5: VEGETATION RED EDGE </string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B6_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>30</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,740&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B6: VEGETATION RED EDGE </string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B7_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>70</y>
+        <width>161</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,783&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B7: VEGETATION RED EDGE </string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B8_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>120</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,842&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B8: NEAR INFRARED (NIR)</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B8A_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>160</y>
+        <width>181</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,865&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B8A: VEGETATION RED EDGE </string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B9_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>200</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,945&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B9: WATER VAPOUR</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B10_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>30</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,375&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B10: SHORTWAVE INFRARED (SWIR) - CIRRUS</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B11_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>70</y>
+        <width>211</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,610&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B11: SHORTWAVE INFRARED (SWIR) 1</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="S2B12_checkBox">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>120</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;2,190&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>B12: SHORTWAVE INFRARED (SWIR) 2</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QPlainTextEdit" name="logWindow">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>80</y>
-     <width>301</width>
-     <height>20</height>
+     <y>410</y>
+     <width>731</width>
+     <height>141</height>
     </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите границу облачности (%):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_12">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>110</y>
-     <width>47</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;от&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_13">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>140</y>
-     <width>47</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;до&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>
