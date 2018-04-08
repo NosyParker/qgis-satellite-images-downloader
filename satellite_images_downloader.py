@@ -31,7 +31,7 @@ from .resources import *
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
 import satsearch
-from satsearch.search import Search
+from satsearch.search import Search, Query
 from satsearch.scene import Scenes
 from satsearch.main import main
 import os.path
@@ -195,21 +195,30 @@ class SatelliteImagesDownloader:
         self.dlg.satelliteName_comboBox.addItems(satellites_list)
 
     def checking_landsat8_category(self):
+        self.dlg.checkParams.appendPlainText("RT IS stated - " + str(self.dlg.categoryRT_checkBox.checkState()))
+        self.dlg.checkParams.appendPlainText("T2 IS stated - " + str(self.dlg.categoryT2_checkBox.checkState()))
+        self.dlg.checkParams.appendPlainText("T1 IS stated - " + str(self.dlg.categoryT1_checkBox.checkState()))
         if self.dlg.categoryT1_checkBox.isChecked():
+            
             if "COLLECTION_CATEGORY" in KWARGS:
                 KWARGS["COLLECTION_CATEGORY"] += "T1,"
             else:
                 KWARGS["COLLECTION_CATEGORY"] = "T1,"
         if self.dlg.categoryT2_checkBox.isChecked():
+
             if "COLLECTION_CATEGORY" in KWARGS:
                 KWARGS["COLLECTION_CATEGORY"] += "T2,"
             else:
                 KWARGS["COLLECTION_CATEGORY"] = "T2,"
         if self.dlg.categoryRT_checkBox.isChecked():
+
             if "COLLECTION_CATEGORY" in KWARGS:
                 KWARGS["COLLECTION_CATEGORY"] += "RT,"
             else:
                 KWARGS["COLLECTION_CATEGORY"] = "RT,"
+
+    def clearing_landsat8_category(self):
+        if "COLLECTION_CATEGORY" in KWARGS: del KWARGS["COLLECTION_CATEGORY"]
 
     def finding_scenes(self):
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
@@ -225,24 +234,20 @@ class SatelliteImagesDownloader:
         KWARGS["date_to"] = DATE_TO
 
         if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
-            self.checking_landsat8_category
+            self.dlg.checkParams.appendPlainText("YES ITS LANDSAT-8")
+            self.checking_landsat8_category()
 
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
-        
-        scenes = main(**KWARGS)
-        self.dlg.finalScenes_lineEdit.setText(str(len(scenes)))
+        self.dlg.checkParams.appendPlainText(str(KWARGS))
+        simple_query_result = Query(**KWARGS).found()
+        self.dlg.finalScenes_lineEdit.setText(str(simple_query_result))
+        self.clearing_landsat8_category()
+
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
 
 
     def run(self):
         """Run method that performs all the real work"""
-        # show the dialog
-        # self.dlg.satelliteName_lineEdit.clear()
-        # self.dlg.clouds_lineEdit.clear()
-        # self.dlg.dateFrom_lineEdit.clear()
-        # self.dlg.dateTo_lineEdit.clear()
-        
-
         self.dlg.show()
         # Run the dialog event loop
         result = self.dlg.exec_()
