@@ -23,7 +23,7 @@
 """
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QProgressBar
+from PyQt5.QtWidgets import QAction, QProgressBar, QApplication, QFileDialog
 from qgis.gui import QgsMessageBar
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -33,11 +33,14 @@ import os
 import satsearch
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
-from satsearch.main import main
 import os.path
+import logging
 from.globals import SATELLITES, KEYWORD_ARGS
 
+
+
 KWARGS = KEYWORD_ARGS
+
 
 class SatelliteImagesDownloader:
     """QGIS Plugin Implementation."""
@@ -74,11 +77,13 @@ class SatelliteImagesDownloader:
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Download Satellite Images')
-        # TODO: We are going to let the user set this up in a future iteration
+
         self.toolbar = self.iface.addToolBar(u'SatelliteImagesDownloader')
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
         self.add_satellites_combobox(SATELLITES)
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
+        self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
+        self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
         
 
     # noinspection PyMethodMayBeStatic
@@ -191,13 +196,17 @@ class SatelliteImagesDownloader:
         # remove the toolbar
         del self.toolbar
 
+    def showFolderDialog(self):
+        folder_path = QFileDialog.getExistingDirectory(self.dlg, "Выберите папку","",QFileDialog.ShowDirsOnly)
+        self.dlg.folderPath_lineEdit.setText(folder_path)
+
+
     def add_satellites_combobox(self, satellites_list):
         self.dlg.satelliteName_comboBox.addItems(satellites_list)
 
+
     def checking_landsat8_category(self):
-        self.dlg.checkParams.appendPlainText("RT IS stated - " + str(self.dlg.categoryRT_checkBox.checkState()))
-        self.dlg.checkParams.appendPlainText("T2 IS stated - " + str(self.dlg.categoryT2_checkBox.checkState()))
-        self.dlg.checkParams.appendPlainText("T1 IS stated - " + str(self.dlg.categoryT1_checkBox.checkState()))
+ 
         if self.dlg.categoryT1_checkBox.isChecked():
             
             if "COLLECTION_CATEGORY" in KWARGS:
@@ -217,8 +226,10 @@ class SatelliteImagesDownloader:
             else:
                 KWARGS["COLLECTION_CATEGORY"] = "RT,"
 
+
     def clearing_landsat8_category(self):
         if "COLLECTION_CATEGORY" in KWARGS: del KWARGS["COLLECTION_CATEGORY"]
+
 
     def finding_scenes(self):
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
@@ -234,16 +245,55 @@ class SatelliteImagesDownloader:
         KWARGS["date_to"] = DATE_TO
 
         if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
-            self.dlg.checkParams.appendPlainText("YES ITS LANDSAT-8")
+
             self.checking_landsat8_category()
 
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
-        self.dlg.checkParams.appendPlainText(str(KWARGS))
+
         simple_query_result = Query(**KWARGS).found()
-        self.dlg.finalScenes_lineEdit.setText(str(simple_query_result))
+        self.dlg.logWindow.appendPlainText(str(simple_query_result)+" снимков найдено")
+
         self.clearing_landsat8_category()
 
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
+
+
+    def downloading_scenes(self):
+        if not os.path.exists(self.dlg.folderPath_lineEdit.text()):
+            self.dlg.logWindow.appendPlainText("Введите корректный путь к директории!")
+            return None
+
+        SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
+        CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
+        CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
+        DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
+        DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
+
+        KWARGS["satellite_name"] = SATTELITE_NAME
+        KWARGS["cloud_from"] = CLOUD_FROM
+        KWARGS["cloud_to"] = CLOUD_TO
+        KWARGS["date_from"] = DATE_FROM
+        KWARGS["date_to"] = DATE_TO
+
+        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
+            self.checking_landsat8_category()
+
+        scenes_query_result = Query(**KWARGS).scenes()
+        scenes = Scenes(scenes_query_result)
+        FILEKEYS = ["MTL"]
+
+        PATH = str(self.dlg.folderPath_lineEdit.text()) + "/"
+        self.dlg.logWindow.appendPlainText("Файлы будут загружены в директорию: " + PATH)
+        self.dlg.logWindow.appendPlainText("К загрузке сцен - " + str(len(scenes)))
+
+        for scene in scenes.scenes:
+            for key in FILEKEYS:
+                QApplication.processEvents()
+                self.dlg.logWindow.appendPlainText("Загружается файл (канал) " + str(key) + "для сцены " + str(scene.product_id))
+                scene.download(key=key, path=PATH)
+        self.dlg.logWindow.appendPlainText("Загрузка завершена!")
+
+        self.clearing_landsat8_category()
 
 
     def run(self):

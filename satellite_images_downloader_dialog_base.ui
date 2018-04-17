@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>786</width>
-    <height>561</height>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,11 +19,11 @@
      <x>0</x>
      <y>0</y>
      <width>781</width>
-     <height>401</height>
+     <height>521</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="seacrhFilters_Tab">
     <attribute name="title">
@@ -58,10 +58,10 @@
     <widget class="QPushButton" name="searchScenesButton">
      <property name="geometry">
       <rect>
-       <x>300</x>
-       <y>130</y>
-       <width>121</width>
-       <height>41</height>
+       <x>310</x>
+       <y>200</y>
+       <width>101</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="toolTip">
@@ -69,16 +69,6 @@
      </property>
      <property name="text">
       <string>Найти снимки</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="finalScenes_lineEdit">
-     <property name="geometry">
-      <rect>
-       <x>130</x>
-       <y>220</y>
-       <width>113</width>
-       <height>20</height>
-      </rect>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -225,40 +215,118 @@
       <number>100</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label_11">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>190</y>
-       <width>321</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;С указанными параметрами найдено снимков:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="downloadScenesButton">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>260</y>
-       <width>191</width>
-       <height>51</height>
+       <x>320</x>
+       <y>460</y>
+       <width>111</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Загрузить все найденные снимки</string>
+      <string>Загрузить</string>
      </property>
     </widget>
-    <widget class="QPlainTextEdit" name="checkParams">
+    <widget class="QPushButton" name="OSM_Button">
      <property name="geometry">
       <rect>
-       <x>400</x>
-       <y>210</y>
-       <width>231</width>
-       <height>101</height>
+       <x>510</x>
+       <y>130</y>
+       <width>75</width>
+       <height>23</height>
       </rect>
+     </property>
+     <property name="text">
+      <string>OSM</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="AOI_Button">
+     <property name="geometry">
+      <rect>
+       <x>600</x>
+       <y>130</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Область</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>491</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добавьте в проект подложку OSM и очертите полигональную область:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>160</y>
+       <width>411</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>301</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Область интереса с координатами вершин:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>410</y>
+       <width>171</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Куда сохранять снимки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="folderPath_lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>410</y>
+       <width>241</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="selectFolderButton">
+     <property name="geometry">
+      <rect>
+       <x>470</x>
+       <y>410</y>
+       <width>31</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>...</string>
      </property>
     </widget>
    </widget>
@@ -804,10 +872,13 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>410</y>
+     <y>530</y>
      <width>731</width>
-     <height>141</height>
+     <height>121</height>
     </rect>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
