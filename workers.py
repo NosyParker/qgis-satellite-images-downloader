@@ -29,10 +29,10 @@ class DownloadWorker(QThread):
         
         if self.scenes == [] or self.scenes == None:
             self.logWindow.appendPlainText("Отсутствуют сцены к загрузке")
-            return
+            self.__del__()
         if self.filekeys == [] or self.filekeys == None:
             self.logWindow.appendPlainText("Не выбран ни один файл к загрузке")
-            return
+            self.__del__()
 
         breaker = False
         for scene in self.scenes:
