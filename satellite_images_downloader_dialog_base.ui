@@ -23,7 +23,7 @@
      <x>0</x>
      <y>0</y>
      <width>781</width>
-     <height>521</height>
+     <height>381</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -36,7 +36,7 @@
     <widget class="QLabel" name="label_13">
      <property name="geometry">
       <rect>
-       <x>490</x>
+       <x>390</x>
        <y>90</y>
        <width>47</width>
        <height>21</height>
@@ -62,8 +62,8 @@
     <widget class="QPushButton" name="searchScenesButton">
      <property name="geometry">
       <rect>
-       <x>310</x>
-       <y>200</y>
+       <x>340</x>
+       <y>170</y>
        <width>101</width>
        <height>31</height>
       </rect>
@@ -101,7 +101,7 @@
     <widget class="QLabel" name="label_12">
      <property name="geometry">
       <rect>
-       <x>320</x>
+       <x>180</x>
        <y>90</y>
        <width>47</width>
        <height>21</height>
@@ -114,7 +114,7 @@
     <widget class="QSpinBox" name="cloudFrom_spinBox">
      <property name="geometry">
       <rect>
-       <x>360</x>
+       <x>240</x>
        <y>90</y>
        <width>111</width>
        <height>20</height>
@@ -206,7 +206,7 @@
     <widget class="QSpinBox" name="cloudTo_spinBox">
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>450</x>
        <y>90</y>
        <width>111</width>
        <height>22</height>
@@ -222,8 +222,8 @@
     <widget class="QPushButton" name="downloadScenesButton">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>460</y>
+       <x>280</x>
+       <y>250</y>
        <width>111</width>
        <height>31</height>
       </rect>
@@ -232,89 +232,24 @@
       <string>Загрузить</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="OSM_Button">
-     <property name="geometry">
-      <rect>
-       <x>510</x>
-       <y>130</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>OSM</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="AOI_Button">
-     <property name="geometry">
-      <rect>
-       <x>600</x>
-       <y>130</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Область</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_6">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>130</y>
-       <width>491</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добавьте в проект подложку OSM и очертите полигональную область:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEdit">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>160</y>
-       <width>411</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>301</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Область интереса с координатами вершин:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>410</y>
-       <width>171</width>
+       <x>10</x>
+       <y>130</y>
+       <width>211</width>
        <height>21</height>
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Куда сохранять снимки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Куда сохранять снимки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folderPath_lineEdit">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>410</y>
+       <x>290</x>
+       <y>130</y>
        <width>241</width>
        <height>20</height>
       </rect>
@@ -323,8 +258,8 @@
     <widget class="QPushButton" name="selectFolderButton">
      <property name="geometry">
       <rect>
-       <x>470</x>
-       <y>410</y>
+       <x>550</x>
+       <y>130</y>
        <width>31</width>
        <height>23</height>
       </rect>
@@ -340,7 +275,7 @@
      <property name="geometry">
       <rect>
        <x>410</x>
-       <y>460</y>
+       <y>250</y>
        <width>101</width>
        <height>31</height>
       </rect>
@@ -357,14 +292,14 @@
     <widget class="QToolBox" name="toolBox">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>0</x>
+       <y>0</y>
        <width>761</width>
-       <height>351</height>
+       <height>341</height>
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="L8_options_page">
       <property name="geometry">
@@ -372,7 +307,7 @@
         <x>0</x>
         <y>0</y>
         <width>761</width>
-        <height>297</height>
+        <height>287</height>
        </rect>
       </property>
       <attribute name="label">
@@ -383,7 +318,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>761</width>
+         <width>751</width>
          <height>191</height>
         </rect>
        </property>
@@ -442,7 +377,7 @@
         <property name="geometry">
          <rect>
           <x>20</x>
-          <y>160</y>
+          <y>140</y>
           <width>101</width>
           <height>31</height>
          </rect>
@@ -490,7 +425,7 @@
         <property name="geometry">
          <rect>
           <x>170</x>
-          <y>160</y>
+          <y>140</y>
           <width>151</width>
           <height>31</height>
          </rect>
@@ -506,7 +441,7 @@
         <property name="geometry">
          <rect>
           <x>170</x>
-          <y>110</y>
+          <y>100</y>
           <width>211</width>
           <height>31</height>
          </rect>
@@ -554,7 +489,7 @@
         <property name="geometry">
          <rect>
           <x>400</x>
-          <y>110</y>
+          <y>100</y>
           <width>191</width>
           <height>31</height>
          </rect>
@@ -570,7 +505,7 @@
         <property name="geometry">
          <rect>
           <x>400</x>
-          <y>160</y>
+          <y>140</y>
           <width>131</width>
           <height>31</height>
          </rect>
@@ -589,7 +524,7 @@
          <x>0</x>
          <y>190</y>
          <width>751</width>
-         <height>101</height>
+         <height>61</height>
         </rect>
        </property>
        <property name="title">
@@ -657,7 +592,7 @@
         <x>0</x>
         <y>0</y>
         <width>761</width>
-        <height>297</height>
+        <height>287</height>
        </rect>
       </property>
       <attribute name="label">
@@ -668,8 +603,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>761</width>
-         <height>281</height>
+         <width>751</width>
+         <height>301</height>
         </rect>
        </property>
        <property name="title">
@@ -891,10 +826,10 @@
   <widget class="QPlainTextEdit" name="logWindow">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>530</y>
-     <width>731</width>
-     <height>121</height>
+     <x>10</x>
+     <y>390</y>
+     <width>771</width>
+     <height>221</height>
     </rect>
    </property>
    <property name="readOnly">
