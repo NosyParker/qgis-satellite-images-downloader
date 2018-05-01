@@ -82,14 +82,12 @@ class SatelliteImagesDownloader:
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
         self.add_satellites_combobox(SATELLITES)
 
-        self.worker = None
+        self.worker = DownloadWorker(self.dlg.logWindow)
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
         self.dlg.stopDownloading.clicked.connect(self.stop_worker)
         
-
-        self.dlg.finished.connect(self.stop_worker)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -355,8 +353,6 @@ class SatelliteImagesDownloader:
 
     def downloading_scenes(self):
         
-        self.worker = DownloadWorker(self.dlg.logWindow)
-
         self.clearing_landsat8_category()
         self.clear_filekeys()
 
@@ -391,22 +387,13 @@ class SatelliteImagesDownloader:
         self.dlg.logWindow.appendPlainText("Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloading.setEnabled(True)
-        # for scene in scenes.scenes:
-        #     QApplication.processEvents()
-        #     for key in FILEKEYS:
-        #         QApplication.processEvents()
-        #         self.dlg.logWindow.appendPlainText("Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
-        #         QApplication.processEvents()
-        #         scene.download(key=key, path=PATH)
-
 
         self.worker.scenes = scenes.scenes
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
         self.worker.start()
-        # self.dlg.logWindow.appendPlainText("Загрузка завершена!")
 
-        # self.dlg.stopDownloading.setEnabled(False)
+
     def run(self):
         """Run method that performs all the real work"""
         self.dlg.show()
