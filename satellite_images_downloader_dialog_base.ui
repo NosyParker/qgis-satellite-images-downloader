@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Download Satellite Images</string>
+   <string>Поиск и загрузка космоснимков</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.png</normaloff>icon.png</iconset>
   </property>
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
@@ -23,7 +27,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="seacrhFilters_Tab">
     <attribute name="title">
@@ -52,7 +56,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите границы облачности (%):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Облачность (%):&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="searchScenesButton">
@@ -81,7 +85,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Выберите спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Спутник:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QComboBox" name="satelliteName_comboBox">
@@ -142,7 +146,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Укажите требуемую дату:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Дата:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
@@ -218,7 +222,7 @@
     <widget class="QPushButton" name="downloadScenesButton">
      <property name="geometry">
       <rect>
-       <x>320</x>
+       <x>270</x>
        <y>460</y>
        <width>111</width>
        <height>31</height>
@@ -329,6 +333,22 @@
       <string>...</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="stopDownloading">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>460</y>
+       <width>101</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Прервать</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="downloadOptions_Tab">
     <attribute name="title">
@@ -344,9 +364,9 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="L8_options_page">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -358,7 +378,7 @@
       <attribute name="label">
        <string>Настройки для LANDSAT-8</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="L8_files_groupBox">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -370,7 +390,7 @@
        <property name="title">
         <string>Доступные каналы и файлы к загрузке:</string>
        </property>
-       <widget class="QCheckBox" name="L8B1_checkBox_2">
+       <widget class="QCheckBox" name="L8B1_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -386,7 +406,7 @@
          <string>B1: COASTAL AEROSOL</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B2_checkBox_2">
+       <widget class="QCheckBox" name="L8B2_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -402,7 +422,7 @@
          <string>B2: BLUE</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B3_checkBox_2">
+       <widget class="QCheckBox" name="L8B3_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -418,7 +438,7 @@
          <string>B3: GREEN</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B4_checkBox_2">
+       <widget class="QCheckBox" name="L8B4_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -434,7 +454,7 @@
          <string>B4: RED</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B5_checkBox_2">
+       <widget class="QCheckBox" name="L8B5_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -450,7 +470,7 @@
          <string>B5: NEAR INFRARED (NIR)</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B6_checkBox_2">
+       <widget class="QCheckBox" name="L8B6_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -466,7 +486,7 @@
          <string>B6: SHORTWAVE INFRARED (SWIR) 1</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B8_checkBox_2">
+       <widget class="QCheckBox" name="L8B8_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -482,7 +502,7 @@
          <string>B8: PANCHROMATIC</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B7_checkBox_2">
+       <widget class="QCheckBox" name="L8B7_checkBox">
         <property name="geometry">
          <rect>
           <x>170</x>
@@ -498,7 +518,7 @@
          <string>B7: SHORTWAVE INFRARED (SWIR) 2</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B9_checkBox_2">
+       <widget class="QCheckBox" name="L8B9_checkBox">
         <property name="geometry">
          <rect>
           <x>400</x>
@@ -514,7 +534,7 @@
          <string>B9: CIRRUS</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B10_checkBox_2">
+       <widget class="QCheckBox" name="L8B10_checkBox">
         <property name="geometry">
          <rect>
           <x>400</x>
@@ -530,7 +550,7 @@
          <string>B10: THERMAL INFRARED (TIRS) 1</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8B11_checkBox_2">
+       <widget class="QCheckBox" name="L8B11_checkBox">
         <property name="geometry">
          <rect>
           <x>400</x>
@@ -546,7 +566,7 @@
          <string>B11: THERMAL INFRARED (TIRS) 2</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="L8MTL_checkBox_2">
+       <widget class="QCheckBox" name="L8MTL_checkBox">
         <property name="geometry">
          <rect>
           <x>400</x>
@@ -563,7 +583,7 @@
         </property>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="L8_category_groupBox">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -631,31 +651,31 @@
        </widget>
       </widget>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="S2_options_page">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>100</width>
-        <height>30</height>
+        <width>761</width>
+        <height>297</height>
        </rect>
       </property>
       <attribute name="label">
        <string>Настройки для SENTINEL-2</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox_4">
+      <widget class="QGroupBox" name="S2_files_groupBox">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
          <width>761</width>
-         <height>161</height>
+         <height>281</height>
         </rect>
        </property>
        <property name="title">
         <string>Sentinel-2: доступные файлы к загрузке</string>
        </property>
-       <widget class="QCheckBox" name="S2B1_checkBox_2">
+       <widget class="QCheckBox" name="S2B1_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -671,7 +691,7 @@
          <string>B1: COASTAL AEROSOL</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B2_checkBox_2">
+       <widget class="QCheckBox" name="S2B2_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -687,7 +707,7 @@
          <string>B2: BLUE</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B3_checkBox_2">
+       <widget class="QCheckBox" name="S2B3_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -703,7 +723,7 @@
          <string>B3: GREEN</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B4_checkBox_2">
+       <widget class="QCheckBox" name="S2B4_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -719,7 +739,7 @@
          <string>B4: RED</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B5_checkBox_2">
+       <widget class="QCheckBox" name="S2B5_checkBox">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -735,7 +755,7 @@
          <string>B5: VEGETATION RED EDGE </string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B6_checkBox_2">
+       <widget class="QCheckBox" name="S2B6_checkBox">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -751,7 +771,7 @@
          <string>B6: VEGETATION RED EDGE </string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B7_checkBox_2">
+       <widget class="QCheckBox" name="S2B7_checkBox">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -767,7 +787,7 @@
          <string>B7: VEGETATION RED EDGE </string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B8_checkBox_2">
+       <widget class="QCheckBox" name="S2B8_checkBox">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -783,7 +803,7 @@
          <string>B8: NEAR INFRARED (NIR)</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B8A_checkBox_2">
+       <widget class="QCheckBox" name="S2B8A_checkBox">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -799,7 +819,7 @@
          <string>B8A: VEGETATION RED EDGE </string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B9_checkBox_2">
+       <widget class="QCheckBox" name="S2B9_checkBox">
         <property name="geometry">
          <rect>
           <x>230</x>
@@ -815,7 +835,7 @@
          <string>B9: WATER VAPOUR</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B10_checkBox_2">
+       <widget class="QCheckBox" name="S2B10_checkBox">
         <property name="geometry">
          <rect>
           <x>440</x>
@@ -831,7 +851,7 @@
          <string>B10: SHORTWAVE INFRARED (SWIR) - CIRRUS</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B11_checkBox_2">
+       <widget class="QCheckBox" name="S2B11_checkBox">
         <property name="geometry">
          <rect>
           <x>440</x>
@@ -847,7 +867,7 @@
          <string>B11: SHORTWAVE INFRARED (SWIR) 1</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="S2B12_checkBox_2">
+       <widget class="QCheckBox" name="S2B12_checkBox">
         <property name="geometry">
          <rect>
           <x>440</x>
