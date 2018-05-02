@@ -25,6 +25,7 @@ from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QProgressBar, QApplication, QFileDialog
 from qgis.gui import QgsMessageBar
+from qgis.core import QgsProject, QgsRasterLayer
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
@@ -33,7 +34,7 @@ import os
 import satsearch
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
-import os.path
+import requests
 import logging
 from.globals import SATELLITES, KEYWORD_ARGS
 from .workers import DownloadWorker
@@ -73,7 +74,8 @@ class SatelliteImagesDownloader:
 
         # Create the dialog (after translation) and keep reference
         self.dlg = SatelliteImagesDownloaderDialog()
-
+        self.dlg.setWindowTitle("Поиск и загрузка космоснимков")
+        self.dlg.setWindowIcon(QIcon("icon.png"))
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Download Satellite Images')
@@ -82,14 +84,14 @@ class SatelliteImagesDownloader:
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
         self.add_satellites_combobox(SATELLITES)
 
-        self.worker = None
+        self.worker = DownloadWorker(self.dlg.logWindow)
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
-        self.dlg.stopDownloading.clicked.connect(self.stop_worker)
-        
+        self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
+        self.dlg.OSMButton.clicked.connect(self.displayOSM)
 
-        self.dlg.finished.connect(self.stop_worker)
+        # self.dlg.finished.connect(self.stop_worker)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -116,7 +118,7 @@ class SatelliteImagesDownloader:
         add_to_menu=True,
         add_to_toolbar=True,
         status_tip=None,
-        whats_this=None,
+        whats_this="Инструмент для поиска и загрузки космоснимков",
         parent=None):
         """Add a toolbar icon to the toolbar.
 
@@ -203,22 +205,56 @@ class SatelliteImagesDownloader:
 
 
     def stop_worker(self):
+        """
+        Вспомогательная функция для остановки работы воркера (потока)
+        """
         self.worker.stop()
         self.worker.quit()
         self.worker.wait()
 
 
     def showFolderDialog(self):
+        """
+        Отображает диалоговое окно для выбора директории сохранения снимков 
+        и сохраняет выбор в текстовое поле.
+        """
         folder_path = QFileDialog.getExistingDirectory(self.dlg, "Выберите папку","",QFileDialog.ShowDirsOnly)
         self.dlg.folderPath_lineEdit.setText(folder_path)
 
 
     def add_satellites_combobox(self, satellites_list):
+        """
+        Добавляет в комбобокс список доступных спутников 
+        из конфига globals.SATELLITES.
+        """
         self.dlg.satelliteName_comboBox.addItems(satellites_list)
 
 
+    def displayOSM(self):
+        """
+        Скачивает подложку OSM, добавляет ее в проект 
+        и отображает в списке слоев.
+        """
+        tempDir = QgsProject.instance().fileName()
+        response = requests.get("http://www.gdal.org/frmt_wms_openstreetmap_tms.xml", stream=True)
+        if response.status_code != 200:
+            return None
+
+        OSM_file = tempDir + "/OSM.xml"
+        with open(OSM_file, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+
+        OSM_layer = self.iface.addRasterLayer(OSM_file, "OpenStreetMap")
+        OSM_layer.setName("OpenStreetMap")
+        return OSM_layer
+
+
     def checking_landsat8_category(self):
- 
+        """
+        Проверяет какие категории снимков Landsat-8 были выбраны.
+        """
         if self.dlg.categoryT1_checkBox.isChecked():
             
             if "COLLECTION_CATEGORY" in KWARGS:
@@ -238,96 +274,56 @@ class SatelliteImagesDownloader:
             else:
                 KWARGS["COLLECTION_CATEGORY"] = "RT,"
 
+
     def check_landsat8_filekeys(self):
-
-        if self.dlg.L8B1_checkBox.isChecked():
-            FILEKEYS.append("B1")
-
-        if self.dlg.L8B2_checkBox.isChecked():
-            FILEKEYS.append("B2")
-
-        if self.dlg.L8B3_checkBox.isChecked():
-            FILEKEYS.append("B3")
-
-        if self.dlg.L8B4_checkBox.isChecked():
-            FILEKEYS.append("B4")
-        
-        if self.dlg.L8B5_checkBox.isChecked():
-            FILEKEYS.append("B5")
-
-        if self.dlg.L8B6_checkBox.isChecked():
-            FILEKEYS.append("B6")
-
-        if self.dlg.L8B7_checkBox.isChecked():
-            FILEKEYS.append("B7")
-
-        if self.dlg.L8B8_checkBox.isChecked():
-            FILEKEYS.append("B8")
-
-        if self.dlg.L8B9_checkBox.isChecked():
-            FILEKEYS.append("B9")
-
-        if self.dlg.L8B10_checkBox.isChecked():
-            FILEKEYS.append("B10")
-
-        if self.dlg.L8B11_checkBox.isChecked():
-            FILEKEYS.append("B11") 
-
+        """
+        Проверяет какие каналы (файлы) к загрузке были выбраны для Landsat-8.
+        """
         if self.dlg.L8MTL_checkBox.isChecked():
-            FILEKEYS.append("MTL")           
+            FILEKEYS.append("MTL")
+
+        for i in range(1,12):
+            t = "self.dlg.L8B" + str(i) + "_checkBox.isChecked()"
+            cast_t = eval(t)
+            if cast_t:
+                FILEKEYS.append("B"+str(i))
 
 
     def check_sentinel2_filekeys(self):
-
-        if self.dlg.S2B1_checkBox.isChecked():
-            FILEKEYS.append("01")
-
-        if self.dlg.S2B2_checkBox.isChecked():
-            FILEKEYS.append("02")
-
-        if self.dlg.S2B3_checkBox.isChecked():
-            FILEKEYS.append("03")
-
-        if self.dlg.S2B4_checkBox.isChecked():
-            FILEKEYS.append("04")
-        
-        if self.dlg.S2B5_checkBox.isChecked():
-            FILEKEYS.append("05")
-
-        if self.dlg.S2B6_checkBox.isChecked():
-            FILEKEYS.append("06")
-
-        if self.dlg.S2B7_checkBox.isChecked():
-            FILEKEYS.append("07")
-
-        if self.dlg.S2B8_checkBox.isChecked():
-            FILEKEYS.append("08")
-
+        """
+        Проверяет какие каналы (файлы) к загрузке были выбраны для Sentinel-2.
+        """
         if self.dlg.S2B8A_checkBox.isChecked():
             FILEKEYS.append("8A")
 
-        if self.dlg.S2B9_checkBox.isChecked():
-            FILEKEYS.append("09")
-
-        if self.dlg.S2B10_checkBox.isChecked():
-            FILEKEYS.append("10")
-
-        if self.dlg.S2B11_checkBox.isChecked():
-            FILEKEYS.append("11") 
-
-        if self.dlg.S2B12_checkBox.isChecked():
-            FILEKEYS.append("12")
+        for i in range(1,12):
+            t = "self.dlg.S2B" + str(i) + "_checkBox.isChecked()"
+            cast_t = eval(t)
+            if cast_t:
+                if i<10:
+                    FILEKEYS.append("0"+str(i))
+                else:
+                    FILEKEYS.append("1"+str(i))
 
 
     def clearing_landsat8_category(self):
+        """
+        Вспомогательная функция для очистки параметра категории снимков L8.
+        """
         if "COLLECTION_CATEGORY" in KWARGS: del KWARGS["COLLECTION_CATEGORY"]
 
     
     def clear_filekeys(self):
+        """
+        Вспомогательная функция для очистки списка ключей для загрузки каналов.
+        """
         del FILEKEYS[:]
 
 
     def finding_scenes(self):
+        """
+        Делает запрос по АПИ на количество снимков согласно выбранным параметрам.
+        """
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
@@ -355,8 +351,6 @@ class SatelliteImagesDownloader:
 
     def downloading_scenes(self):
         
-        self.worker = DownloadWorker(self.dlg.logWindow)
-
         self.clearing_landsat8_category()
         self.clear_filekeys()
 
@@ -390,23 +384,14 @@ class SatelliteImagesDownloader:
         self.dlg.logWindow.appendPlainText("К загрузке представлено сцен - " + str(len(scenes)))
         self.dlg.logWindow.appendPlainText("Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
-        self.dlg.stopDownloading.setEnabled(True)
-        # for scene in scenes.scenes:
-        #     QApplication.processEvents()
-        #     for key in FILEKEYS:
-        #         QApplication.processEvents()
-        #         self.dlg.logWindow.appendPlainText("Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
-        #         QApplication.processEvents()
-        #         scene.download(key=key, path=PATH)
-
+        self.dlg.stopDownloadingButton.setEnabled(True)
 
         self.worker.scenes = scenes.scenes
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
         self.worker.start()
-        # self.dlg.logWindow.appendPlainText("Загрузка завершена!")
 
-        # self.dlg.stopDownloading.setEnabled(False)
+
     def run(self):
         """Run method that performs all the real work"""
         self.dlg.show()

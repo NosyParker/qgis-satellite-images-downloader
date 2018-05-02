@@ -232,7 +232,7 @@
       <string>Загрузить</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="OSM_Button">
+    <widget class="QPushButton" name="OSMButton">
      <property name="geometry">
       <rect>
        <x>510</x>
@@ -333,7 +333,7 @@
       <string>...</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="stopDownloading">
+    <widget class="QPushButton" name="stopDownloadingButton">
      <property name="enabled">
       <bool>false</bool>
      </property>
