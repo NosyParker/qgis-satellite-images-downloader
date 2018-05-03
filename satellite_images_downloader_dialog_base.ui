@@ -27,7 +27,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="seacrhFilters_Tab">
     <attribute name="title">
@@ -245,7 +245,7 @@
       <string>OSM</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="AOI_Button">
+    <widget class="QPushButton" name="AOIButton">
      <property name="geometry">
       <rect>
        <x>600</x>
@@ -271,7 +271,7 @@
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добавьте в проект подложку OSM и очертите полигональную область:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="coordinatesList_lineEdit">
      <property name="geometry">
       <rect>
        <x>320</x>
@@ -371,8 +371,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>761</width>
-        <height>297</height>
+        <width>98</width>
+        <height>28</height>
        </rect>
       </property>
       <attribute name="label">
