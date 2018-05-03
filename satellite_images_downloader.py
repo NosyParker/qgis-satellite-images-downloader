@@ -38,7 +38,7 @@ import requests
 import logging
 from.globals import SATELLITES, KEYWORD_ARGS
 from .workers import DownloadWorker
-
+from .helpers import CaptureCoordinates
 
 KWARGS = KEYWORD_ARGS
 FILEKEYS = []
@@ -84,12 +84,19 @@ class SatelliteImagesDownloader:
         self.toolbar.setObjectName(u'SatelliteImagesDownloader')
         self.add_satellites_combobox(SATELLITES)
 
+
         self.worker = DownloadWorker(self.dlg.logWindow)
+        self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
+                                self.dlg.coordinatesList_lineEdit, 
+                                destination_crs="EPSG:4326")
+
+
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
         self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
         self.dlg.OSMButton.clicked.connect(self.displayOSM)
+        self.dlg.AOIButton.clicked.connect(self.captureAOI)
 
         # self.dlg.finished.connect(self.stop_worker)
 
@@ -249,6 +256,15 @@ class SatelliteImagesDownloader:
         OSM_layer = self.iface.addRasterLayer(OSM_file, "OpenStreetMap")
         OSM_layer.setName("OpenStreetMap")
         return OSM_layer
+
+
+    def captureAOI(self):
+        """
+        Фиксирует координаты интересуемой области.
+        """
+        self.capturer.layer = self.iface.activeLayer()
+        self.capturer.source_crs = self.capturer.layer.crs().authid()
+        self.iface.mapCanvas().setMapTool(self.capturer)
 
 
     def checking_landsat8_category(self):
