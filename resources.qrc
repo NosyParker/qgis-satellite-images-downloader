@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/plugins/satellite_images_downloader">
+    <file>icon.png</file>
+    <file>ui/icons/search_tab_logo.png</file>
+    <file>ui/icons/usatu_icon.png</file>
+    <file>ui/icons/search_tab_logo.png</file>
+    </qresource>
+</RCC>
