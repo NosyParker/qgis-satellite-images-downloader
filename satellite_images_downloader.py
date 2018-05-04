@@ -21,6 +21,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QProgressBar, QApplication, QFileDialog
@@ -31,12 +32,13 @@ from .resources import *
 # Import the code for the dialog
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
+import json
 import satsearch
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
 import requests
 import logging
-from.globals import SATELLITES, KEYWORD_ARGS
+from .globals import SATELLITES, KEYWORD_ARGS, AOI_COORDINATES
 from .workers import DownloadWorker
 from .helpers import CaptureCoordinates
 
@@ -75,7 +77,19 @@ class SatelliteImagesDownloader:
         # Create the dialog (after translation) and keep reference
         self.dlg = SatelliteImagesDownloaderDialog()
         self.dlg.setWindowTitle("Поиск и загрузка космоснимков")
-        self.dlg.setWindowIcon(QIcon("icon.png"))
+
+        # устанавливаем иконку плагина
+        main_icon = QtGui.QIcon()
+        main_icon.addPixmap(QtGui.QPixmap(":/plugins/satellite_images_downloader/ui/icons/search_tab_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.dlg.setWindowIcon(main_icon)
+
+        # устанавливаем иконку для вкладки с поисковыми параметрами
+        # search_tab_icon = QtGui.QIcon()
+        # search_tab_icon.addPixmap(QtGui.QPixmap(":/plugins/satellite_images_downloader/ui/icons/search_tab_logo.png"),QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.dlg.seacrhFilters_Tab.setWindowIcon(search_tab_icon)
+        # self.dlg.downloadOptions_Tab.setWindowIcon(search_tab_icon)
+
+
         # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&Download Satellite Images')
@@ -97,6 +111,7 @@ class SatelliteImagesDownloader:
         self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
         self.dlg.OSMButton.clicked.connect(self.displayOSM)
         self.dlg.AOIButton.clicked.connect(self.captureAOI)
+        self.dlg.buildGeoJSONButton.clicked.connect(self.buildGeoJSON)
 
         # self.dlg.finished.connect(self.stop_worker)
 
@@ -124,8 +139,8 @@ class SatelliteImagesDownloader:
         enabled_flag=True,
         add_to_menu=True,
         add_to_toolbar=True,
-        status_tip=None,
-        whats_this="Инструмент для поиска и загрузки космоснимков",
+        status_tip="Plugin for searching and downloading satellite images",
+        whats_this="Search and Download Satellite Images",
         parent=None):
         """Add a toolbar icon to the toolbar.
 
@@ -176,6 +191,7 @@ class SatelliteImagesDownloader:
 
         if whats_this is not None:
             action.setWhatsThis(whats_this)
+            action.setText(whats_this)
 
         if add_to_toolbar:
             self.toolbar.addAction(action)
@@ -351,6 +367,8 @@ class SatelliteImagesDownloader:
         KWARGS["cloud_to"] = CLOUD_TO
         KWARGS["date_from"] = DATE_FROM
         KWARGS["date_to"] = DATE_TO
+        KWARGS["intersects"] = self.buildGeoJSON()
+
 
         if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
             self.checking_landsat8_category()
@@ -385,6 +403,7 @@ class SatelliteImagesDownloader:
         KWARGS["cloud_to"] = CLOUD_TO
         KWARGS["date_from"] = DATE_FROM
         KWARGS["date_to"] = DATE_TO
+        KWARGS["intersects"] = self.buildGeoJSON()
 
         if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
             self.checking_landsat8_category()
@@ -406,6 +425,19 @@ class SatelliteImagesDownloader:
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
         self.worker.start()
+
+    def reloadAOICoordinates(self):
+        del AOI_COORDINATES[:]
+
+
+    def buildGeoJSON(self):
+        AOI_COORDINATES.append(AOI_COORDINATES[0])
+        # geojson = {"type":"Feature", "properties":{}, "geometry":{"type":"Polygon", "coordinates":[]}}
+        # geojson["geometry"]["coordinates"].append(AOI_COORDINATES)
+        geojson = "{\"type\": \"Feature\", \"properties\": {},\"geometry\": {\"type\": \"Polygon\", \"coordinates\": [" + str(AOI_COORDINATES)+"]}}"
+        self.dlg.logWindow.appendPlainText(str(geojson))
+        # valid_geojson = json.loads(geojson)
+        return str(geojson)
 
 
     def run(self):
