@@ -100,9 +100,7 @@ class SatelliteImagesDownloader:
 
 
         self.worker = DownloadWorker(self.dlg.logWindow)
-        self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
-                                self.dlg.coordinatesList_lineEdit, 
-                                destination_crs="EPSG:4326")
+
 
 
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
@@ -278,6 +276,9 @@ class SatelliteImagesDownloader:
         """
         Фиксирует координаты интересуемой области.
         """
+        self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
+                                self.dlg.coordinatesList_lineEdit, 
+                                destination_crs="EPSG:4326")
         self.capturer.layer = self.iface.activeLayer()
         self.capturer.source_crs = self.capturer.layer.crs().authid()
         self.iface.mapCanvas().setMapTool(self.capturer)
