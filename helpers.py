@@ -42,8 +42,11 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
             AOI_COORDINATES.append([round(tr_point.x(), 7), round(tr_point.y(), 7)])
         elif event.button() == Qt.RightButton:
             self.reset()
+            AOI_COORDINATES.clear()
 
 
     def canvasDoubleClickEvent(self, event):
+        # self.reset()
+        # AOI_COORDINATES.clear()
         self.canvas.unsetMapTool(self)
 
