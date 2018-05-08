@@ -99,10 +99,12 @@ class SatelliteImagesDownloader:
         self.add_satellites_combobox(SATELLITES)
 
 
+
+        self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
+                                self.dlg.coordinatesList_lineEdit, 
+                                destination_crs="EPSG:4326")
+
         self.worker = DownloadWorker(self.dlg.logWindow)
-
-
-
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
@@ -225,6 +227,10 @@ class SatelliteImagesDownloader:
         del self.toolbar
 
 
+    def start_worker(self):
+        pass
+
+
     def stop_worker(self):
         """
         Вспомогательная функция для остановки работы воркера (потока)
@@ -232,6 +238,8 @@ class SatelliteImagesDownloader:
         self.worker.stop()
         self.worker.quit()
         self.worker.wait()
+        self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.downloadScenesButton.setEnabled(True)
 
 
     def showFolderDialog(self):
@@ -276,9 +284,9 @@ class SatelliteImagesDownloader:
         """
         Фиксирует координаты интересуемой области.
         """
-        self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
-                                self.dlg.coordinatesList_lineEdit, 
-                                destination_crs="EPSG:4326")
+
+        self.capturer.reset()
+        AOI_COORDINATES.clear()
         self.capturer.layer = self.iface.activeLayer()
         self.capturer.source_crs = self.capturer.layer.crs().authid()
         self.iface.mapCanvas().setMapTool(self.capturer)
@@ -421,21 +429,27 @@ class SatelliteImagesDownloader:
         self.dlg.logWindow.appendPlainText("Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloadingButton.setEnabled(True)
+        self.dlg.downloadScenesButton.setEnabled(False)
 
         self.worker.scenes = scenes.scenes
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
-        self.worker.start()
+        try:
+            self.worker.start()
+        except:
+            self.stop_worker()
+
 
     def reloadAOICoordinates(self):
         del AOI_COORDINATES[:]
 
 
     def buildGeoJSON(self):
-        AOI_COORDINATES.append(AOI_COORDINATES[0])
         # geojson = {"type":"Feature", "properties":{}, "geometry":{"type":"Polygon", "coordinates":[]}}
         # geojson["geometry"]["coordinates"].append(AOI_COORDINATES)
-        geojson = "{\"type\": \"Feature\", \"properties\": {},\"geometry\": {\"type\": \"Polygon\", \"coordinates\": [" + str(AOI_COORDINATES)+"]}}"
+        if not AOI_COORDINATES:
+            return None
+        geojson = "{\"type\": \"Feature\", \"properties\": {},\"geometry\": {\"type\": \"Polygon\", \"coordinates\": [" + str(AOI_COORDINATES + [AOI_COORDINATES[0]])+"]}}"
         self.dlg.logWindow.appendPlainText(str(geojson))
         # valid_geojson = json.loads(geojson)
         return str(geojson)
