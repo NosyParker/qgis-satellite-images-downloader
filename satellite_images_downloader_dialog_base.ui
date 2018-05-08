@@ -300,7 +300,7 @@
       <string>GEOJSON</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -374,7 +374,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="L8_options_page">
       <property name="geometry">
@@ -394,13 +394,13 @@
          <x>0</x>
          <y>0</y>
          <width>631</width>
-         <height>191</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="title">
         <string>Доступные каналы и файлы к загрузке:</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -537,15 +537,15 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>190</y>
+         <y>170</y>
          <width>631</width>
-         <height>71</height>
+         <height>61</height>
         </rect>
        </property>
        <property name="title">
         <string>Категории снимков:</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -594,6 +594,32 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QGroupBox" name="Alt_Storages">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>230</y>
+         <width>631</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Альтернативные хранилища</string>
+       </property>
+       <widget class="QCheckBox" name="googleSourceCheckBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>101</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Google Storage</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
      <widget class="QWidget" name="S2_options_page">
       <property name="geometry">
@@ -619,7 +645,7 @@
        <property name="title">
         <string>Sentinel-2: доступные файлы к загрузке</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>10</x>
