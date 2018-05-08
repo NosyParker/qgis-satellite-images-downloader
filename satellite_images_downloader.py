@@ -422,6 +422,10 @@ class SatelliteImagesDownloader:
 
         scenes_query_result = Query(**KWARGS).scenes()
         scenes = Scenes(scenes_query_result)
+
+        if SATTELITE_NAME == "Landsat-8 OLI/TIRS" and self.dlg.googleSourceCheckBox.isChecked():
+            for scene in scenes.scenes:
+                scene.source = "google"
         
         PATH = str(self.dlg.folderPath_lineEdit.text()) + "/"
         self.dlg.logWindow.appendPlainText("Файлы будут загружены в директорию: " + PATH)
