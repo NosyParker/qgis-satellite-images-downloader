@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QBrush
 from PyQt5.QtCore import *
 from qgis.gui import *
 from qgis.utils import *
@@ -18,8 +18,12 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
         self.source_crs = source_crs
         self.destination_crs = destination_crs
         self.rubberBand = QgsRubberBand(self.canvas, QgsWkbTypes.geometryType(QgsWkbTypes.Polygon))
-        self.rubberBand.setColor(Qt.red)
-        self.rubberBand.setWidth(1)
+        self.rubberBand.setColor(QColor("transparent"))
+        self.rubberBand.setWidth(2)
+        # self.rubberBand.setIcon(QgsRubberBand.ICON_FULL_DIAMOND)
+        # self.rubberBand.setIconSize(75)
+        # self.rubberBand.setBrushStyle(QBrush(Qt.FDiagPattern))
+        self.rubberBand.setStrokeColor(Qt.red)
         self.reset()
 
     def reset(self):
