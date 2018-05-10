@@ -101,7 +101,7 @@ class SatelliteImagesDownloader:
 
 
         self.capturer = CaptureCoordinates(self.iface.mapCanvas(), 
-                                self.dlg.coordinatesList_lineEdit, 
+                                self.dlg.logWindow, 
                                 destination_crs="EPSG:4326")
 
         self.worker = DownloadWorker(self.dlg.logWindow)
@@ -449,13 +449,17 @@ class SatelliteImagesDownloader:
 
 
     def buildGeoJSON(self):
-        # geojson = {"type":"Feature", "properties":{}, "geometry":{"type":"Polygon", "coordinates":[]}}
-        # geojson["geometry"]["coordinates"].append(AOI_COORDINATES)
+
         if not AOI_COORDINATES:
             return None
+
+        if not self.capturer.rubberBand.asGeometry().isGeosValid():
+            self.iface.messageBar().pushWarning("Error", "Не валидный полигон! Дальнейший поиск будет осуществляться без учета выбранной территории")           
+            return None
+
         geojson = "{\"type\": \"Feature\", \"properties\": {},\"geometry\": {\"type\": \"Polygon\", \"coordinates\": [" + str(AOI_COORDINATES + [AOI_COORDINATES[0]])+"]}}"
         self.dlg.logWindow.appendPlainText(str(geojson))
-        # valid_geojson = json.loads(geojson)
+
         return str(geojson)
 
 
