@@ -109,7 +109,8 @@ class SatelliteImagesDownloader:
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
         self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
-        self.dlg.OSMButton.clicked.connect(self.displayOSM)
+        self.dlg.GoogleStreetsButton.clicked.connect(self.displayGoogleStreets)
+        self.dlg.GoogleHybridButton.clicked.connect(self.displayGoogleHybrid)
         self.dlg.AOIButton.clicked.connect(self.captureAOI)
 
         # self.dlg.finished.connect(self.stop_worker)
@@ -258,25 +259,30 @@ class SatelliteImagesDownloader:
         self.dlg.satelliteName_comboBox.addItems(satellites_list)
 
 
-    def displayOSM(self):
+    def add_basemap(self, service_url, name):
+        import qgis.utils	
+        service_uri = "type=xyz&zmin=0&zmax=22&url=http://"+requests.utils.quote(service_url)
+        tms_layer = qgis.utils.iface.addRasterLayer(service_uri, name, "wms")
+
+
+    def displayGoogleHybrid(self):
         """
-        Скачивает подложку OSM, добавляет ее в проект 
+        Скачивает подложку Google Hybrid, добавляет ее в проект 
         и отображает в списке слоев.
         """
-        tempDir = QgsProject.instance().fileName()
-        response = requests.get("http://www.gdal.org/frmt_wms_openstreetmap_tms.xml", stream=True)
-        if response.status_code != 200:
-            return None
+        service_url ="mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+        name = "Google Hybrid"
+        self.add_basemap(service_url, name)
 
-        OSM_file = tempDir + "/OSM.xml"
-        with open(OSM_file, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
-
-        OSM_layer = self.iface.addRasterLayer(OSM_file, "OpenStreetMap")
-        OSM_layer.setName("OpenStreetMap")
-        return OSM_layer
+    
+    def displayGoogleStreets(self):
+        """
+        Скачивает подложку Google Streets, добавляет ее в проект 
+        и отображает в списке слоев.
+        """
+        service_url ="mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+        name = "Google Streets"
+        self.add_basemap(service_url, name)
 
 
     def captureAOI(self):

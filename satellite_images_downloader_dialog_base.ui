@@ -170,17 +170,17 @@
       <string>Загрузить</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="OSMButton">
+    <widget class="QPushButton" name="GoogleStreetsButton">
      <property name="geometry">
       <rect>
-       <x>260</x>
-       <y>90</y>
-       <width>61</width>
+       <x>230</x>
+       <y>100</y>
+       <width>91</width>
        <height>23</height>
       </rect>
      </property>
      <property name="text">
-      <string>OSM</string>
+      <string>GoogleStreets</string>
      </property>
     </widget>
     <widget class="QPushButton" name="AOIButton">
@@ -201,12 +201,12 @@
       <rect>
        <x>10</x>
        <y>90</y>
-       <width>251</width>
+       <width>221</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добавьте в проект подложку OSM:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Добавьте в проект подложку:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -331,6 +331,19 @@
      </property>
      <property name="text">
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Очертите область интереса:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="GoogleHybridButton">
+     <property name="geometry">
+      <rect>
+       <x>330</x>
+       <y>100</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>GoogleHybrid</string>
      </property>
     </widget>
    </widget>
@@ -600,8 +613,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>631</width>
-        <height>297</height>
+        <width>100</width>
+        <height>30</height>
        </rect>
       </property>
       <attribute name="label">
