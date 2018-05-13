@@ -111,7 +111,6 @@ class SatelliteImagesDownloader:
         self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
         self.dlg.OSMButton.clicked.connect(self.displayOSM)
         self.dlg.AOIButton.clicked.connect(self.captureAOI)
-        self.dlg.buildGeoJSONButton.clicked.connect(self.buildGeoJSON)
 
         # self.dlg.finished.connect(self.stop_worker)
 
@@ -458,7 +457,7 @@ class SatelliteImagesDownloader:
             return None
 
         geojson = "{\"type\": \"Feature\", \"properties\": {},\"geometry\": {\"type\": \"Polygon\", \"coordinates\": [" + str(AOI_COORDINATES + [AOI_COORDINATES[0]])+"]}}"
-        self.dlg.logWindow.appendPlainText(str(geojson))
+        # self.dlg.logWindow.appendPlainText(str(geojson))
 
         return str(geojson)
 
