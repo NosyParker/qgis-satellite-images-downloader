@@ -5,6 +5,7 @@ from qgis.utils import *
 from qgis.core import *
 
 from .globals import AOI_COORDINATES
+import datetime
 
 class CaptureCoordinates(QgsMapToolEmitPoint):
     canvasDoubleClicked = QtCore.pyqtSignal(object, object)
@@ -53,7 +54,7 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
         # self.reset()
         # AOI_COORDINATES.clear()
         if not self.rubberBand.asGeometry().isGeosValid():
-            self.textEdit.appendPlainText("ВНИМАНИЕ: Не валидный полигон! Дальнейший поиск будет осуществляться без учета выбранной территории")
+            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" ВНИМАНИЕ: Не валидный полигон! Дальнейший поиск будет осуществляться без учета выбранной территории")
         
         self.canvas.unsetMapTool(self)
 

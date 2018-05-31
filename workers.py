@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
 
+import datetime
 
 class DownloadWorker(QThread):
 
@@ -28,24 +29,23 @@ class DownloadWorker(QThread):
             self.isRunning = True
         
         if self.scenes == [] or self.scenes == None:
-            self.logWindow.appendPlainText("Отсутствуют сцены к загрузке")
+            self.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Отсутствуют сцены к загрузке")
             self.__del__()
         if self.filekeys == [] or self.filekeys == None:
-            self.logWindow.appendPlainText("Не выбран ни один файл к загрузке")
+            self.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Не выбран ни один файл к загрузке")
             self.__del__()
 
         breaker = False
         for scene in self.scenes:
             for key in self.filekeys:
-                self.logWindow.appendPlainText("Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
-                QApplication.processEvents() 
+                self.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
                 scene.download(key=key, path = self.path)
                 if not self.isRunning:
                     breaker = True
                     break
             if breaker:
                 break
-        self.logWindow.appendPlainText("Загрузка завершена!")
+        self.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка завершена!")
     
     
     def stop(self):

@@ -34,6 +34,8 @@ from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
 import json
 import satsearch
+import datetime
+from time import gmtime, strftime
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
 import requests
@@ -44,6 +46,7 @@ from .helpers import CaptureCoordinates
 
 KWARGS = KEYWORD_ARGS
 FILEKEYS = []
+# SHOWTIME = strftime("%H:%M:%S", gmtime())
 
 class SatelliteImagesDownloader:
     """QGIS Plugin Implementation."""
@@ -390,7 +393,7 @@ class SatelliteImagesDownloader:
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
 
         simple_query_result = Query(**KWARGS).found()
-        self.dlg.logWindow.appendPlainText(str(simple_query_result)+" снимков найдено")
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +str(simple_query_result)+" снимков найдено")
 
         self.clearing_landsat8_category()
 
@@ -403,7 +406,7 @@ class SatelliteImagesDownloader:
         self.clear_filekeys()
 
         if not os.path.exists(self.dlg.folderPath_lineEdit.text()):
-            self.dlg.logWindow.appendPlainText("Введите корректный путь к директории!")
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Введите корректный путь к директории!")
             return None
 
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
@@ -433,9 +436,9 @@ class SatelliteImagesDownloader:
                 scene.source = "google"
         
         PATH = str(self.dlg.folderPath_lineEdit.text()) + "/"
-        self.dlg.logWindow.appendPlainText("Файлы будут загружены в директорию: " + PATH)
-        self.dlg.logWindow.appendPlainText("К загрузке представлено сцен - " + str(len(scenes)))
-        self.dlg.logWindow.appendPlainText("Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Файлы будут загружены в директорию: " + PATH)
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(scenes)))
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloadingButton.setEnabled(True)
         self.dlg.downloadScenesButton.setEnabled(False)
