@@ -3,7 +3,6 @@ from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication
 from satsearch.search import Search, Query
 from satsearch.scene import Scenes
-from .helpers import ConsolePrinter
 import datetime
 
 class DownloadWorker(QThread):
