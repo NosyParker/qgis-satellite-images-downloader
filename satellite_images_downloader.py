@@ -107,7 +107,7 @@ class SatelliteImagesDownloader:
                                 self.dlg.logWindow, 
                                 destination_crs="EPSG:4326")
 
-        self.worker = DownloadWorker(self.dlg.logWindow)
+
         self.dlg.searchScenesButton.clicked.connect(self.finding_scenes)
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
@@ -241,6 +241,8 @@ class SatelliteImagesDownloader:
         self.worker.stop()
         self.worker.quit()
         self.worker.wait()
+        self.worker.terminate()
+        del self.worker
         self.dlg.stopDownloadingButton.setEnabled(False)
         self.dlg.downloadScenesButton.setEnabled(True)
 
@@ -400,6 +402,9 @@ class SatelliteImagesDownloader:
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
 
 
+    def download_ready(self, data):
+        self.dlg.logWindow.appendPlainText(data)
+
     def downloading_scenes(self):
         
         self.clearing_landsat8_category()
@@ -443,9 +448,11 @@ class SatelliteImagesDownloader:
         self.dlg.stopDownloadingButton.setEnabled(True)
         self.dlg.downloadScenesButton.setEnabled(False)
 
+        self.worker = DownloadWorker()
         self.worker.scenes = scenes.scenes
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
+        self.worker.data_downloaded.connect(self.download_ready)
         try:
             self.worker.start()
         except:
