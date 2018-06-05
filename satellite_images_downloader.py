@@ -115,6 +115,7 @@ class SatelliteImagesDownloader:
         self.dlg.GoogleStreetsButton.clicked.connect(self.displayGoogleStreets)
         self.dlg.GoogleHybridButton.clicked.connect(self.displayGoogleHybrid)
         self.dlg.AOIButton.clicked.connect(self.captureAOI)
+        self.dlg.setupCoordinatesButton.clicked.connect(self.setup_coordinates)
 
         # self.dlg.finished.connect(self.stop_worker)
 
@@ -300,6 +301,17 @@ class SatelliteImagesDownloader:
         self.capturer.layer = self.iface.activeLayer()
         self.capturer.source_crs = self.capturer.layer.crs().authid()
         self.iface.mapCanvas().setMapTool(self.capturer)
+
+
+    def setup_coordinates(self):
+        """
+        Устанавливает координаты известной области.
+        """
+        self.capturer.layer = self.iface.activeLayer()
+        self.capturer.source_crs = self.capturer.layer.crs().authid()
+        x_wgs84 = float(self.dlg.x_wgs84_lineEdit.text())
+        y_wgs84 = float(self.dlg.y_wgs84_lineEdit.text())
+        self.capturer.addCoordinates(x_wgs84, y_wgs84)
 
 
     def checking_landsat8_category(self):
