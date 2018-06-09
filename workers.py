@@ -8,6 +8,7 @@ import datetime
 class DownloadWorker(QThread):
     
     data_downloaded = QtCore.pyqtSignal(object)
+    work_finished = QtCore.pyqtSignal(object)
 
     def __init__(self, scenes = None, filekeys=None, path = None, **kwargs):
         super(DownloadWorker, self).__init__()
@@ -46,7 +47,7 @@ class DownloadWorker(QThread):
                     break
             if breaker:
                 break
-        self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка завершена!")
+        self.work_finished.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка завершена!")
     
     
     def stop(self):
