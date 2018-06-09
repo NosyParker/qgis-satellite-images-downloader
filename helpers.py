@@ -31,30 +31,44 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
         self.rubberBand.reset(QgsWkbTypes.geometryType(QgsWkbTypes.Polygon))
 
 
-    def transformCRS(self):
-        return QgsCoordinateTransform(QgsCoordinateReferenceSystem(self.source_crs),
-                    QgsCoordinateReferenceSystem(self.destination_crs), 
+    def transformCRS(self, source_crs, destination_crs):
+        return QgsCoordinateTransform(QgsCoordinateReferenceSystem(source_crs),
+                    QgsCoordinateReferenceSystem(destination_crs), 
                     QgsProject.instance())
 
 
     def canvasPressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            transform = self.transformCRS()
+            transform = self.transformCRS(self.source_crs, self.destination_crs)
             point = self.toLayerCoordinates(self.layer, event.pos())
             self.rubberBand.addPoint(point,True)
             self.rubberBand.show()
             tr_point = transform.transform(point)
             AOI_COORDINATES.append([round(tr_point.x(), 7), round(tr_point.y(), 7)])
+            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(round(tr_point.x(), 3)) + ", " + str(round(tr_point.y(), 3)))
         elif event.button() == Qt.RightButton:
             self.reset()
             AOI_COORDINATES.clear()
 
 
     def canvasDoubleClickEvent(self, event):
-        # self.reset()
-        # AOI_COORDINATES.clear()
         if not self.rubberBand.asGeometry().isGeosValid():
-            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" ВНИМАНИЕ: Не валидный полигон! Дальнейший поиск будет осуществляться без учета выбранной территории")
+            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +" ВНИМАНИЕ: Не валидный полигон! Дальнейший поиск будет осуществляться без учета выбранной территории")
         
         self.canvas.unsetMapTool(self)
 
+
+    def addCoordinates(self, x, y):
+        point = QgsPointXY(x,y)
+        AOI_COORDINATES.append([round(x,7), round(y,7)])
+        transform = self.transformCRS(self.destination_crs, self.source_crs)
+        tr_point = transform.transform(point)
+        self.rubberBand.addPoint(tr_point, True)
+        self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(point.x()) + "," + str(point.y()))
+        # self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Координаты полигона: "+ str(AOI_COORDINATES))
+        self.rubberBand.show()
+
+    
+    def cancelCoordinates(self):
+        self.reset()
+        AOI_COORDINATES.clear()

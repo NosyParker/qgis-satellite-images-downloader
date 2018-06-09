@@ -112,9 +112,12 @@ class SatelliteImagesDownloader:
         self.dlg.selectFolderButton.clicked.connect(self.showFolderDialog)
         self.dlg.downloadScenesButton.clicked.connect(self.downloading_scenes)
         self.dlg.stopDownloadingButton.clicked.connect(self.stop_worker)
+        self.dlg.interruptingButton.clicked.connect(self.interrupt_worker)
         self.dlg.GoogleStreetsButton.clicked.connect(self.displayGoogleStreets)
         self.dlg.GoogleHybridButton.clicked.connect(self.displayGoogleHybrid)
         self.dlg.AOIButton.clicked.connect(self.captureAOI)
+        self.dlg.setupCoordinatesButton.clicked.connect(self.setup_coordinates)
+        self.dlg.cancelCoordinatesButton.clicked.connect(self.clear_coordinates)
 
         # self.dlg.finished.connect(self.stop_worker)
 
@@ -244,6 +247,18 @@ class SatelliteImagesDownloader:
         self.worker.terminate()
         del self.worker
         self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.interruptingButton.setEnabled(False)
+        self.dlg.downloadScenesButton.setEnabled(True)
+
+
+    def interrupt_worker(self):
+
+        self.worker.stop()
+        self.worker.terminate()
+        del self.worker
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка была прервана!")
+        self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.interruptingButton.setEnabled(False)
         self.dlg.downloadScenesButton.setEnabled(True)
 
 
@@ -294,12 +309,30 @@ class SatelliteImagesDownloader:
         """
         Фиксирует координаты интересуемой области.
         """
-
-        self.capturer.reset()
-        AOI_COORDINATES.clear()
+        self.capturer.cancelCoordinates()
         self.capturer.layer = self.iface.activeLayer()
         self.capturer.source_crs = self.capturer.layer.crs().authid()
         self.iface.mapCanvas().setMapTool(self.capturer)
+
+
+    def setup_coordinates(self):
+        """
+        Устанавливает координаты известной области.
+        """
+        self.capturer.layer = self.iface.activeLayer()
+        self.capturer.source_crs = self.capturer.layer.crs().authid()
+        x_wgs84 = float(self.dlg.x_wgs84_lineEdit.text())
+        y_wgs84 = float(self.dlg.y_wgs84_lineEdit.text())
+
+        if -180<=x_wgs84<=180 and -90<=y_wgs84<=90:
+            self.capturer.addCoordinates(x_wgs84, y_wgs84)
+        else:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
+
+
+    def clear_coordinates(self):
+        self.capturer.cancelCoordinates()
+        # self.dlg.logWindow.appendPlainText("")
 
 
     def checking_landsat8_category(self):
@@ -405,6 +438,17 @@ class SatelliteImagesDownloader:
     def download_ready(self, data):
         self.dlg.logWindow.appendPlainText(data)
 
+
+
+
+    def work_ready(self, data):
+        self.dlg.logWindow.appendPlainText(data)
+        self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.interruptingButton.setEnabled(False)
+        self.dlg.downloadScenesButton.setEnabled(True)
+
+
+
     def downloading_scenes(self):
         
         self.clearing_landsat8_category()
@@ -446,6 +490,7 @@ class SatelliteImagesDownloader:
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloadingButton.setEnabled(True)
+        self.dlg.interruptingButton.setEnabled(True)
         self.dlg.downloadScenesButton.setEnabled(False)
 
         self.worker = DownloadWorker()
@@ -453,6 +498,8 @@ class SatelliteImagesDownloader:
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
         self.worker.data_downloaded.connect(self.download_ready)
+        self.worker.work_finished.connect(self.work_ready)
+
         try:
             self.worker.start()
         except:
