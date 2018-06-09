@@ -45,7 +45,7 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
             self.rubberBand.show()
             tr_point = transform.transform(point)
             AOI_COORDINATES.append([round(tr_point.x(), 7), round(tr_point.y(), 7)])
-            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(tr_point.x()) + "," + str(tr_point.y()))
+            self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(round(tr_point.x(), 3)) + ", " + str(round(tr_point.y(), 3)))
         elif event.button() == Qt.RightButton:
             self.reset()
             AOI_COORDINATES.clear()
@@ -64,6 +64,11 @@ class CaptureCoordinates(QgsMapToolEmitPoint):
         transform = self.transformCRS(self.destination_crs, self.source_crs)
         tr_point = transform.transform(point)
         self.rubberBand.addPoint(tr_point, True)
-        self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(tr_point.x()) + "," + str(tr_point.y()))
-        self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Координаты полигона: "+ str(AOI_COORDINATES))
+        self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Добавлена точка с координатами: "+ str(point.x()) + "," + str(point.y()))
+        # self.textEdit.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +"Координаты полигона: "+ str(AOI_COORDINATES))
         self.rubberBand.show()
+
+    
+    def cancelCoordinates(self):
+        self.reset()
+        AOI_COORDINATES.clear()
