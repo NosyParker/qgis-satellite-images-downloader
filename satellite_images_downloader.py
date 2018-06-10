@@ -309,6 +309,8 @@ class SatelliteImagesDownloader:
         """
         Фиксирует координаты интересуемой области.
         """
+        if AOI_COORDINATES:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Координаты были сброшены")
         self.capturer.cancelCoordinates()
         self.capturer.layer = self.iface.activeLayer()
         self.capturer.source_crs = self.capturer.layer.crs().authid()
@@ -331,6 +333,8 @@ class SatelliteImagesDownloader:
 
 
     def clear_coordinates(self):
+        if AOI_COORDINATES:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Координаты были сброшены")
         self.capturer.cancelCoordinates()
         # self.dlg.logWindow.appendPlainText("")
 
