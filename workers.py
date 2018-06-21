@@ -42,6 +42,7 @@ class DownloadWorker(QThread):
             for key in self.filekeys:
                 self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
                 scene.download(key=key, path = self.path)
+                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + str(key) + " для сцены " + str(scene.product_id) + " был загружен и сохранен как " + str(scene.scene_id)+str(key))
                 if not self.isRunning:
                     breaker = True
                     break

@@ -7,14 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>661</width>
-    <height>538</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
+   <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+    <horstretch>10</horstretch>
+    <verstretch>10</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>200</width>
+    <height>200</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>661</width>
+    <height>530</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Поиск и загрузка космоснимков</string>
@@ -87,7 +99,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt; font-weight:600;&quot;&gt;Куда сохранять снимки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;Куда сохранять снимки:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="folderPath_lineEdit">
@@ -419,6 +431,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Десятичный формат представления, разделитель - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;точка&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
      <widget class="QLineEdit" name="x_wgs84_lineEdit">
       <property name="geometry">
@@ -430,7 +445,7 @@
        </rect>
       </property>
       <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Формат&lt;/span&gt;: &lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;x1,y1:x2,y2:x3,y3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Десятичный формат представления, разделитель - &lt;/span&gt;&lt;span style=&quot; font-size:10pt; font-weight:600;&quot;&gt;точка&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="text">
        <string/>
@@ -489,7 +504,7 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>631</width>
+       <width>641</width>
        <height>351</height>
       </rect>
      </property>
@@ -501,7 +516,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>631</width>
+        <width>641</width>
         <height>297</height>
        </rect>
       </property>
@@ -513,7 +528,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>631</width>
+         <width>641</width>
          <height>171</height>
         </rect>
        </property>
@@ -523,9 +538,9 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>20</x>
+          <x>10</x>
           <y>30</y>
-          <width>581</width>
+          <width>621</width>
           <height>131</height>
          </rect>
         </property>
@@ -533,7 +548,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="L8B1_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,43-0,45&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Побережья и аэрозоли.&lt;/span&gt;&lt;br/&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,43-0,45&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B1: COASTAL AEROSOL</string>
@@ -543,7 +558,7 @@
          <item row="0" column="1">
           <widget class="QCheckBox" name="L8B5_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,85-0,88&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,85-0,88&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B5: NEAR INFRARED (NIR)</string>
@@ -553,7 +568,7 @@
          <item row="0" column="2">
           <widget class="QCheckBox" name="L8B9_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,36-1,39&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Облака.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,36-1,39&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B9: CIRRUS</string>
@@ -563,7 +578,7 @@
          <item row="1" column="0">
           <widget class="QCheckBox" name="L8B2_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,45-0,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Синий&lt;/span&gt;.&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,45-0,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B2: BLUE</string>
@@ -573,7 +588,7 @@
          <item row="1" column="1">
           <widget class="QCheckBox" name="L8B6_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,57-1,65&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 1,57-1,65&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B6: SHORTWAVE INFRARED (SWIR) 1</string>
@@ -583,7 +598,7 @@
          <item row="1" column="2">
           <widget class="QCheckBox" name="L8B10_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 10,60-11,19&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Дальний инфракрасный (тепловой).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 10,60-11,19&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B10: THERMAL INFRARED (TIRS) 1</string>
@@ -593,7 +608,7 @@
          <item row="2" column="0">
           <widget class="QCheckBox" name="L8B3_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,53-0,59&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Зеленый.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,53-0,59&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B3: GREEN</string>
@@ -603,7 +618,7 @@
          <item row="2" column="1">
           <widget class="QCheckBox" name="L8B7_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 2,11-2,29&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 2,11-2,29&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B7: SHORTWAVE INFRARED (SWIR) 2</string>
@@ -613,7 +628,7 @@
          <item row="2" column="2">
           <widget class="QCheckBox" name="L8B11_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 11,50-12,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Дальний инфракрасный (тепловой).&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;100м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 11,50-12,51&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B11: THERMAL INFRARED (TIRS) 2</string>
@@ -623,7 +638,7 @@
          <item row="3" column="0">
           <widget class="QCheckBox" name="L8B4_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,64-0,67&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Красный.&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;30м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,64-0,67&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B4: RED</string>
@@ -633,7 +648,7 @@
          <item row="3" column="1">
           <widget class="QCheckBox" name="L8B8_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;15м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,5-0,68&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Панхроматический.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;15м&lt;/span&gt;, длина волны -&lt;span style=&quot; font-weight:600;&quot;&gt; 0,5-0,68&lt;/span&gt; (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B8: PANCHROMATIC</string>
@@ -643,7 +658,7 @@
          <item row="3" column="2">
           <widget class="QCheckBox" name="L8MTL_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Файл с доступными метаданными&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Файл с доступными &lt;span style=&quot; font-weight:600;&quot;&gt;метаданными&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>MTL (METADATA)</string>
@@ -746,8 +761,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>100</width>
-        <height>30</height>
+        <width>641</width>
+        <height>297</height>
        </rect>
       </property>
       <attribute name="label">
@@ -778,7 +793,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="S2B1_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,443&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Побережья и аэрозоли.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,443&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B1: COASTAL AEROSOL</string>
@@ -788,7 +803,7 @@
          <item row="0" column="1">
           <widget class="QCheckBox" name="S2B6_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,740&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Граничный красный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,740&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B6: VEGETATION RED EDGE </string>
@@ -798,7 +813,7 @@
          <item row="0" column="2">
           <widget class="QCheckBox" name="S2B10_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,375&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный - Облака.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,375&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B10: SHORTWAVE INFRARED (SWIR) - CIRRUS</string>
@@ -808,7 +823,7 @@
          <item row="1" column="0">
           <widget class="QCheckBox" name="S2B2_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,490&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Синий.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,490&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B2: BLUE</string>
@@ -818,7 +833,7 @@
          <item row="1" column="1">
           <widget class="QCheckBox" name="S2B7_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,783&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Граничный красный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,783&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B7: VEGETATION RED EDGE </string>
@@ -828,7 +843,7 @@
          <item row="1" column="2">
           <widget class="QCheckBox" name="S2B11_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,610&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;1,610&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B11: SHORTWAVE INFRARED (SWIR) 1</string>
@@ -838,7 +853,7 @@
          <item row="2" column="0">
           <widget class="QCheckBox" name="S2B3_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,560&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Зеленый.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,560&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B3: GREEN</string>
@@ -848,7 +863,7 @@
          <item row="2" column="1">
           <widget class="QCheckBox" name="S2B8_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,842&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,842&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B8: NEAR INFRARED (NIR)</string>
@@ -858,7 +873,7 @@
          <item row="2" column="2">
           <widget class="QCheckBox" name="S2B12_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;2,190&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;2,190&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B12: SHORTWAVE INFRARED (SWIR) 2</string>
@@ -868,7 +883,7 @@
          <item row="3" column="0">
           <widget class="QCheckBox" name="S2B4_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,665&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Красный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;10м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,665&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B4: RED</string>
@@ -878,17 +893,17 @@
          <item row="3" column="1">
           <widget class="QCheckBox" name="S2B8A_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,865&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Ближний инфракрасный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,865&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
-            <string>B8A: VEGETATION RED EDGE </string>
+            <string>B8A: NARROW NIR</string>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
           <widget class="QCheckBox" name="S2B5_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,705&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Граничный красный.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;20м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,705&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B5: VEGETATION RED EDGE </string>
@@ -898,7 +913,7 @@
          <item row="4" column="1">
           <widget class="QCheckBox" name="S2B9_checkBox">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,945&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Водяной пар.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Разрешение - &lt;span style=&quot; font-weight:600;&quot;&gt;60м&lt;/span&gt;, центральная длина волны (&lt;span style=&quot; font-weight:600;&quot;&gt;мкм&lt;/span&gt;) - &lt;span style=&quot; font-weight:600;&quot;&gt;0,945&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>B9: WATER VAPOUR</string>
