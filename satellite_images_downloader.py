@@ -312,9 +312,13 @@ class SatelliteImagesDownloader:
         if AOI_COORDINATES:
             self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Координаты были сброшены")
         self.capturer.cancelCoordinates()
-        self.capturer.layer = self.iface.activeLayer()
-        self.capturer.source_crs = self.capturer.layer.crs().authid()
-        self.iface.mapCanvas().setMapTool(self.capturer)
+        try:
+            self.capturer.layer = self.iface.activeLayer()
+            self.capturer.source_crs = self.capturer.layer.crs().authid()
+            self.iface.mapCanvas().setMapTool(self.capturer)
+        except:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Необходимо выбрать базовый слой для выделения области интереса!")
+
 
 
     def setup_coordinates(self):
@@ -322,14 +326,21 @@ class SatelliteImagesDownloader:
         Устанавливает координаты известной области.
         """
         self.capturer.layer = self.iface.activeLayer()
-        self.capturer.source_crs = self.capturer.layer.crs().authid()
-        x_wgs84 = float(self.dlg.x_wgs84_lineEdit.text())
-        y_wgs84 = float(self.dlg.y_wgs84_lineEdit.text())
-
-        if -180<=x_wgs84<=180 and -90<=y_wgs84<=90:
-            self.capturer.addCoordinates(x_wgs84, y_wgs84)
+        if self.capturer.layer == None:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Необходимо выбрать базовый слой для выделения области интереса!")
         else:
-            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
+            self.capturer.source_crs = self.capturer.layer.crs().authid()
+            try:
+                x_wgs84 = float(self.dlg.x_wgs84_lineEdit.text())
+                y_wgs84 = float(self.dlg.y_wgs84_lineEdit.text())
+                if -180<=x_wgs84<=180 and -90<=y_wgs84<=90:
+                    self.capturer.addCoordinates(x_wgs84, y_wgs84)
+                else:
+                    self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
+            except:
+                self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
+
+            
 
 
     def clear_coordinates(self):
@@ -432,7 +443,7 @@ class SatelliteImagesDownloader:
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
 
         simple_query_result = Query(**KWARGS).found()
-        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +str(simple_query_result)+" снимков найдено")
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +str(simple_query_result)+" снимков найдено")
 
         self.clearing_landsat8_category()
 
@@ -517,6 +528,7 @@ class SatelliteImagesDownloader:
     def buildGeoJSON(self):
 
         if not AOI_COORDINATES:
+            self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Область интереса не была выбрана! Поиск будет осуществляться по всей территории Земли.")
             return None
 
         if not self.capturer.rubberBand.asGeometry().isGeosValid():
