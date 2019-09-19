@@ -1,8 +1,8 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication
-from satsearch.search import Search, Query
-from satsearch.scene import Scenes
+# from satsearch.search import Search, Query
+# from satsearch.scene import Scenes
 import datetime
 
 class DownloadWorker(QThread):

@@ -33,11 +33,12 @@ from .resources import *
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
 import json
-import satsearch
+
 import datetime
 from time import gmtime, strftime
-from satsearch.search import Search, Query
-from satsearch.scene import Scenes
+
+from satsearch import Search
+
 import requests
 import logging
 from .globals import SATELLITES, KEYWORD_ARGS, AOI_COORDINATES
@@ -424,36 +425,58 @@ class SatelliteImagesDownloader:
         Делает запрос по АПИ на количество снимков согласно выбранным параметрам.
         """
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
+
+        searching_collection_name = None
+
+        if SATTELITE_NAME == "Landsat-8":
+            searching_collection_name = "landsat-8-l1"
+        elif SATTELITE_NAME == "Sentinel-2":
+            searching_collection_name = "sentinel-2-l1c"
+
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        KWARGS["satellite_name"] = SATTELITE_NAME
-        KWARGS["cloud_from"] = CLOUD_FROM
-        KWARGS["cloud_to"] = CLOUD_TO
-        KWARGS["date_from"] = DATE_FROM
-        KWARGS["date_to"] = DATE_TO
-        KWARGS["intersects"] = self.buildGeoJSON()
-
-
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
-            self.checking_landsat8_category()
-
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
 
-        simple_query_result = Query(**KWARGS).found()
-        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +str(simple_query_result)+" снимков найдено")
+        # self.clearing_landsat8_category()
+        query = {
+            'eo:cloud_cover': {
+                'lte' : CLOUD_TO,
+                'gte' : CLOUD_FROM
+            }
+        }
 
-        self.clearing_landsat8_category()
+        if searching_collection_name:
+            query['collection'] = {'eq' : searching_collection_name}
 
+        intersects_geojson_data = self.buildGeoJSON()
+
+        date_param_string = f"{DATE_FROM}/{DATE_TO}"
+
+        search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+
+        founded_items_count = search.found()
+        
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
+        
+        info_str = f"{founded_items_count} снимков найдено"
+
+        if searching_collection_name:
+            if searching_collection_name == 'landsat-8-l1':
+                info_str = f"{founded_items_count} снимков Landsat-8 найдено"
+            else:
+                info_str = f"{founded_items_count} снимков Sentinel-2 найдено"
+        else:
+            info_str = f"{founded_items_count} снимков Landsat-8 и Sentinel-2 найдено"
+
+        self.dlg.logWindow.appendPlainText(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] {info_str}")
+
 
 
     def download_ready(self, data):
         self.dlg.logWindow.appendPlainText(data)
-
-
 
 
     def work_ready(self, data):
@@ -461,7 +484,6 @@ class SatelliteImagesDownloader:
         self.dlg.stopDownloadingButton.setEnabled(False)
         self.dlg.interruptingButton.setEnabled(False)
         self.dlg.downloadScenesButton.setEnabled(True)
-
 
 
     def downloading_scenes(self):
