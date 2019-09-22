@@ -1,9 +1,10 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication
-# from satsearch.search import Search, Query
-# from satsearch.scene import Scenes
+from satsearch import Search
 import datetime
+import dateutil
+import os
 
 class DownloadWorker(QThread):
     
@@ -36,13 +37,24 @@ class DownloadWorker(QThread):
         if self.filekeys == [] or self.filekeys == None:
             self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Не выбран ни один файл к загрузке")
             self.__del__()
-
+            
         breaker = False
         for scene in self.scenes:
+
+            if scene['collection'] == 'sentinel-2-l1c':
+                scene_id = scene['sentinel:product_id']
+            elif scene['collection'] == 'landsat-8-l1':
+                scene_id = scene['landsat:product_id']
+            date_time = dateutil.parser.parse(scene['datetime']).strftime ("%Y-%m-%d")
+
             for key in self.filekeys:
-                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загружается файл (канал) " + str(key) + " для сцены " + str(scene.product_id))
-                scene.download(key=key, path = self.path)
-                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + str(key) + " для сцены " + str(scene.product_id) + " был загружен и сохранен как " + str(scene.scene_id)+str(key))
+
+                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загружается файл (канал) " + str(key) + " для сцены " + str(scene_id))
+
+                filename = scene.download(key=key, path = f"{self.path}/{scene['collection']}/{date_time}")
+
+                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + str(key) + " для сцены " + str(scene_id) + " был загружен и сохранен как " + str(filename))
+
                 if not self.isRunning:
                     breaker = True
                     break

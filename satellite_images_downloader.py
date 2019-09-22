@@ -394,16 +394,16 @@ class SatelliteImagesDownloader:
         Проверяет какие каналы (файлы) к загрузке были выбраны для Sentinel-2.
         """
         if self.dlg.S2B8A_checkBox.isChecked():
-            FILEKEYS.append("8A")
+            FILEKEYS.append("B8A")
 
         for i in range(1,12):
             t = "self.dlg.S2B" + str(i) + "_checkBox.isChecked()"
             cast_t = eval(t)
             if cast_t:
                 if i<10:
-                    FILEKEYS.append("0"+str(i))
+                    FILEKEYS.append("B0"+str(i))
                 else:
-                    FILEKEYS.append("1"+str(i))
+                    FILEKEYS.append("B1"+str(i))
 
 
     def clearing_landsat8_category(self):
@@ -496,34 +496,47 @@ class SatelliteImagesDownloader:
             return None
 
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
+
+        searching_collection_name = None
+
+        if SATTELITE_NAME == "Landsat-8":
+            searching_collection_name = "landsat-8-l1"
+        elif SATTELITE_NAME == "Sentinel-2":
+            searching_collection_name = "sentinel-2-l1c"
+
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        KWARGS["satellite_name"] = SATTELITE_NAME
-        KWARGS["cloud_from"] = CLOUD_FROM
-        KWARGS["cloud_to"] = CLOUD_TO
-        KWARGS["date_from"] = DATE_FROM
-        KWARGS["date_to"] = DATE_TO
-        KWARGS["intersects"] = self.buildGeoJSON()
+        query = {
+            'eo:cloud_cover': {
+                'lte' : CLOUD_TO,
+                'gte' : CLOUD_FROM
+            }
+        }
 
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
+        if searching_collection_name:
+            query['collection'] = {'eq' : searching_collection_name}
+
+        intersects_geojson_data = self.buildGeoJSON()
+
+        date_param_string = f"{DATE_FROM}/{DATE_TO}"
+
+        search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+
+        items = search.items()
+
+        if searching_collection_name == "landsat-8-l1":
             self.checking_landsat8_category()
             self.check_landsat8_filekeys()
-        elif SATTELITE_NAME == "Sentinel-2":
+        elif searching_collection_name == "sentinel-2-l1c":
             self.check_sentinel2_filekeys()
 
-        scenes_query_result = Query(**KWARGS).scenes()
-        scenes = Scenes(scenes_query_result)
-
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS" and self.dlg.googleSourceCheckBox.isChecked():
-            for scene in scenes.scenes:
-                scene.source = "google"
         
-        PATH = str(self.dlg.folderPath_lineEdit.text()) + "/"
+        PATH = str(self.dlg.folderPath_lineEdit.text())
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Файлы будут загружены в директорию: " + PATH)
-        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(scenes)))
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(items)))
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloadingButton.setEnabled(True)
@@ -531,7 +544,7 @@ class SatelliteImagesDownloader:
         self.dlg.downloadScenesButton.setEnabled(False)
 
         self.worker = DownloadWorker()
-        self.worker.scenes = scenes.scenes
+        self.worker.scenes = items
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
         self.worker.data_downloaded.connect(self.download_ready)
