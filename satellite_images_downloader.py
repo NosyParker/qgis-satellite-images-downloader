@@ -341,38 +341,25 @@ class SatelliteImagesDownloader:
             except:
                 self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
 
-            
-
 
     def clear_coordinates(self):
         if AOI_COORDINATES:
             self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Координаты были сброшены")
         self.capturer.cancelCoordinates()
-        # self.dlg.logWindow.appendPlainText("")
 
 
     def checking_landsat8_category(self):
         """
         Проверяет какие категории снимков Landsat-8 были выбраны.
         """
+        tiers = []
         if self.dlg.categoryT1_checkBox.isChecked():
-            
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "T1,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "T1,"
+            tiers.append("T1")
         if self.dlg.categoryT2_checkBox.isChecked():
-
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "T2,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "T2,"
+            tiers.append("T2")
         if self.dlg.categoryRT_checkBox.isChecked():
-
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "RT,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "RT,"
+            tiers.append("RT")
+        return tiers
 
 
     def check_landsat8_filekeys(self):
@@ -440,7 +427,9 @@ class SatelliteImagesDownloader:
 
         self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
 
-        # self.clearing_landsat8_category()
+        intersects_geojson_data = self.buildGeoJSON()
+        date_param_string = f"{DATE_FROM}/{DATE_TO}"
+
         query = {
             'eo:cloud_cover': {
                 'lte' : CLOUD_TO,
@@ -451,16 +440,20 @@ class SatelliteImagesDownloader:
         if searching_collection_name:
             query['collection'] = {'eq' : searching_collection_name}
 
-        intersects_geojson_data = self.buildGeoJSON()
 
-        date_param_string = f"{DATE_FROM}/{DATE_TO}"
+        founded_items_count = 0
+        if searching_collection_name == "landsat-8-l1":
+            landsat_tiers = self.checking_landsat8_category()
+            for tier in landsat_tiers: 
+                query['landsat:tier'] = {"ea" : tier}
+                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+                founded_items_count += search.found()
+        else:
+            search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+            founded_items_count = search.found()
 
-        search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
-
-        founded_items_count = search.found()
         
         self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
-        
         info_str = f"{founded_items_count} снимков найдено"
 
         if searching_collection_name:
@@ -528,12 +521,21 @@ class SatelliteImagesDownloader:
         items = search.items()
 
         if searching_collection_name == "landsat-8-l1":
-            self.checking_landsat8_category()
             self.check_landsat8_filekeys()
         elif searching_collection_name == "sentinel-2-l1c":
             self.check_sentinel2_filekeys()
 
-        
+        items = []
+        if searching_collection_name == "landsat-8-l1":
+            landsat_tiers = self.checking_landsat8_category()
+            for tier in landsat_tiers: 
+                query['landsat:tier'] = {"ea" : tier}
+                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+                items += search.items()
+        else:
+            search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+            items = search.items()
+
         PATH = str(self.dlg.folderPath_lineEdit.text())
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Файлы будут загружены в директорию: " + PATH)
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(items)))
