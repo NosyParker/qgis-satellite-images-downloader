@@ -1,13 +1,18 @@
 from PyQt5 import QtCore
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication
+
 from satsearch import Search
+
 import datetime
 import dateutil
 import os
 
 class DownloadWorker(QThread):
-    
+    """
+    Класс для реализации загрузчика эвент-эмиттера чтобы не подвешивать UI-поток
+    """
+    work_started = QtCore.pyqtSignal(object)
     data_downloaded = QtCore.pyqtSignal(object)
     work_finished = QtCore.pyqtSignal(object)
 
@@ -37,7 +42,8 @@ class DownloadWorker(QThread):
         if self.filekeys == [] or self.filekeys == None:
             self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Не выбран ни один файл к загрузке")
             self.__del__()
-            
+        
+        self.work_started.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загрузка вот-вот начнется...")
         breaker = False
         for scene in self.scenes:
 
@@ -70,3 +76,54 @@ class DownloadWorker(QThread):
     def __del__(self):
         self.wait()
 
+
+
+class FindWorker(QThread):
+    """
+    Класс для реализации поисковика эвент-эмиттера чтобы не подвешивать UI-поток
+    """
+    search_is_started = QtCore.pyqtSignal(object) # событие, когда происходит иинициализация поиска
+    files_are_found = QtCore.pyqtSignal(int, str) # событие, когда поисковик выполнил запрос
+
+
+    def __init__(self, intersects = None, time = None, query = None):
+        super(FindWorker, self).__init__()
+        self.intersects = intersects
+        self.time = time
+        self.query = query
+        self.isRunning = True
+
+
+    def run(self):
+        if not self.isRunning:
+            self.isRunning = True
+
+        items_count = 0
+        self.search_is_started.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Ищу...")
+
+        # is really shit-shit code,
+        # но ребятишки, сделавшие API, видимо не подумали о том, 
+        # что может потребоваться передавать параметры через OR (||)
+        if isinstance(self.query, dict):
+            if self.intersects is not None:
+                search = Search(intersects=self.intersects, time=self.time, query=self.query)
+            else:
+                search = Search(time=self.time, query=self.query)
+            items_count = search.found()
+            self.files_are_found.emit(items_count, self.query["collection"]["eq"])
+        elif isinstance(self.query, list):
+            for single_query in self.query:
+                if self.intersects is not None:
+                    search = Search(intersects=self.intersects, time=self.time, query=single_query)
+                else:
+                    search = Search(time=self.time, query=single_query)
+                items_count += search.found()
+            self.files_are_found.emit(items_count, self.query[0]["collection"]["eq"])
+
+
+    def stop(self):
+        self.isRunning = False
+
+
+    def __del__(self):
+        self.wait()

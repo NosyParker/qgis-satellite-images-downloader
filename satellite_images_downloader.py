@@ -42,7 +42,7 @@ from satsearch import Search
 import requests
 import logging
 from .globals import SATELLITES, KEYWORD_ARGS, AOI_COORDINATES
-from .workers import DownloadWorker
+from .workers import DownloadWorker, FindWorker
 from .helpers import CaptureCoordinates
 
 KWARGS = KEYWORD_ARGS
@@ -240,7 +240,7 @@ class SatelliteImagesDownloader:
 
     def stop_worker(self):
         """
-        Вспомогательная функция для остановки работы воркера (потока)
+        Вспомогательная функция для остановки работы воркера-загрузчика
         """
         self.worker.stop()
         self.worker.quit()
@@ -252,12 +252,55 @@ class SatelliteImagesDownloader:
         self.dlg.downloadScenesButton.setEnabled(True)
 
 
+    def stop_finder(self):
+        """
+        Вспомогательная функция для остановки работы воркера-поисковика
+        """
+        self.finder.stop()
+        self.finder.quit()
+        self.finder.wait()
+        self.finder.terminate()
+        del self.finder
+
+
     def interrupt_worker(self):
 
         self.worker.stop()
         self.worker.terminate()
         del self.worker
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка была прервана!")
+        self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.interruptingButton.setEnabled(False)
+        self.dlg.downloadScenesButton.setEnabled(True)
+
+
+    """ Ряд методов-коллбэков на эвенты от воркеров """
+    def work_is_starting(self, data):
+        """ Общий коллбэк на эвент начала работы воркеров """
+        self.dlg.logWindow.appendPlainText(data)
+
+
+    def download_ready(self, data):
+        """ Коллбэк на эвент загрузки 1 файла """
+        self.dlg.logWindow.appendPlainText(data)
+
+
+    def files_are_found(self, files_count, searching_collection_name):
+        """
+        Коллбэк на эвент завершения запроса на определение количества снимков при заданных параметрах
+        """
+        if searching_collection_name == 'landsat-8-l1':
+            info_str = f"{str(files_count)} снимков Landsat-8 найдено"
+        else:
+            info_str = f"{str(files_count)} снимков Sentinel-2 найдено"
+        self.dlg.logWindow.appendPlainText(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] {info_str}")
+
+
+    def work_ready(self, data):
+        """ 
+        Коллбэк на эвент завершений всего процесса загрузки снимков
+        """
+        self.dlg.logWindow.appendPlainText(data)
         self.dlg.stopDownloadingButton.setEnabled(False)
         self.dlg.interruptingButton.setEnabled(False)
         self.dlg.downloadScenesButton.setEnabled(True)
@@ -319,7 +362,6 @@ class SatelliteImagesDownloader:
             self.iface.mapCanvas().setMapTool(self.capturer)
         except:
             self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Необходимо выбрать базовый слой для выделения области интереса!")
-
 
 
     def setup_coordinates(self):
@@ -409,7 +451,7 @@ class SatelliteImagesDownloader:
 
     def finding_scenes(self):
         """
-        Делает запрос по АПИ на количество снимков согласно выбранным параметрам.
+        Делает запрос по API на количество снимков согласно выбранным параметрам.
         """
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
 
@@ -425,8 +467,6 @@ class SatelliteImagesDownloader:
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
-
         intersects_geojson_data = self.buildGeoJSON()
         date_param_string = f"{DATE_FROM}/{DATE_TO}"
 
@@ -440,47 +480,41 @@ class SatelliteImagesDownloader:
         if searching_collection_name:
             query['collection'] = {'eq' : searching_collection_name}
 
-
-        founded_items_count = 0
+        # is really shit-shit code,
+        # но ребятишки, сделавшие API, видимо не подумали о том, 
+        # что может потребоваться передавать параметры через OR (||)
+        landsat_queries =[]
         if searching_collection_name == "landsat-8-l1":
             landsat_tiers = self.checking_landsat8_category()
-            for tier in landsat_tiers: 
-                query['landsat:tier'] = {"ea" : tier}
-                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
-                founded_items_count += search.found()
+            for tier in landsat_tiers:
+                query['landsat:tier'] = {"eq" : tier}
+                landsat_queries.append(query.copy())
+            
+        # инициализируем воркера-поисковика
+        # снабжаем его всеми необходимыми параметрами
+        if searching_collection_name == "landsat-8-l1" and len(landsat_queries) >= 2:
+            self.finder = FindWorker(intersects=intersects_geojson_data, time=date_param_string, query=landsat_queries)
         else:
-            search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
-            founded_items_count = search.found()
+            self.finder = FindWorker(intersects=intersects_geojson_data, time=date_param_string, query=query)
 
-        
-        self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
-        info_str = f"{founded_items_count} снимков найдено"
+        # вешаем коллбэки на его эвенты
+        self.finder.search_is_started.connect(self.work_is_starting)
+        self.finder.files_are_found.connect(self.files_are_found)
 
-        if searching_collection_name:
-            if searching_collection_name == 'landsat-8-l1':
-                info_str = f"{founded_items_count} снимков Landsat-8 найдено"
-            else:
-                info_str = f"{founded_items_count} снимков Sentinel-2 найдено"
-        else:
-            info_str = f"{founded_items_count} снимков Landsat-8 и Sentinel-2 найдено"
-
-        self.dlg.logWindow.appendPlainText(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] {info_str}")
+        # запускаем поисковик и ждем результат
+        try:
+            self.finder.start()
+        except Exception as e:
+            self.dlg.logWindow.appendPlainText(str(e))
+            self.stop_finder()
 
 
-
-    def download_ready(self, data):
-        self.dlg.logWindow.appendPlainText(data)
-
-
-    def work_ready(self, data):
-        self.dlg.logWindow.appendPlainText(data)
-        self.dlg.stopDownloadingButton.setEnabled(False)
-        self.dlg.interruptingButton.setEnabled(False)
-        self.dlg.downloadScenesButton.setEnabled(True)
 
 
     def downloading_scenes(self):
-        
+        """
+        Делает запрос по API на загрузку снимков на основе выбранных параметров.
+        """
         self.clearing_landsat8_category()
         self.clear_filekeys()
 
@@ -549,6 +583,7 @@ class SatelliteImagesDownloader:
         self.worker.scenes = items
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
+        self.worker.work_started.connect(self.work_is_starting)
         self.worker.data_downloaded.connect(self.download_ready)
         self.worker.work_finished.connect(self.work_ready)
 
