@@ -549,11 +549,7 @@ class SatelliteImagesDownloader:
         intersects_geojson_data = self.buildGeoJSON()
 
         date_param_string = f"{DATE_FROM}/{DATE_TO}"
-
-        search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
-
-        items = search.items()
-
+        
         if searching_collection_name == "landsat-8-l1":
             self.check_landsat8_filekeys()
         elif searching_collection_name == "sentinel-2-l1c":
@@ -563,11 +559,19 @@ class SatelliteImagesDownloader:
         if searching_collection_name == "landsat-8-l1":
             landsat_tiers = self.checking_landsat8_category()
             for tier in landsat_tiers: 
-                query['landsat:tier'] = {"ea" : tier}
-                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+                query['landsat:tier'] = {"eq" : tier}
+
+                if intersects_geojson_data is not None:
+                    search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+                else:
+                    search = Search(time=date_param_string, query=query)
+                
                 items += search.items()
         else:
-            search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+            if intersects_geojson_data is not None:
+                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+            else:
+                search = Search(time=date_param_string, query=query)
             items = search.items()
 
         PATH = str(self.dlg.folderPath_lineEdit.text())
