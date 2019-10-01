@@ -37,13 +37,13 @@ class DownloadWorker(QThread):
             self.isRunning = True
         
         if self.scenes == [] or self.scenes == None:
-            self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Отсутствуют сцены к загрузке")
+            self.data_downloaded.emit(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] Отсутствуют сцены к загрузке")
             self.__del__()
         if self.filekeys == [] or self.filekeys == None:
-            self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Не выбран ни один файл к загрузке")
+            self.data_downloaded.emit(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] Файлы не были выбраны для загрузки")
             self.__del__()
         
-        self.work_started.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Загрузка вот-вот начнется...")
+        self.work_started.emit(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] Загрузка снимков вот-вот начнется...")
         breaker = False
         for scene in self.scenes:
 
@@ -59,14 +59,18 @@ class DownloadWorker(QThread):
 
                 filename = scene.download(key=key, path = f"{self.path}/{scene['collection']}/{date_time}")
 
-                self.data_downloaded.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + str(key) + " для сцены " + str(scene_id) + " был загружен и сохранен как " + str(filename))
+                if filename is not None:
+                    info_out_str = f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] {str(key)} для сцены {str(scene_id)} был загружен и сохранен как {str(filename)}"
+                else: 
+                    info_out_str = f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] Не удалось загрузить {str(key)} для сцены {str(scene_id)}, т.к. на этот файл установлено ограничение на доступ источником снимков"
+                self.data_downloaded.emit(info_out_str)
 
                 if not self.isRunning:
                     breaker = True
                     break
             if breaker:
                 break
-        self.work_finished.emit("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка завершена!")
+        self.work_finished.emit(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] Загрузка завершена!")
     
     
     def stop(self):
@@ -74,6 +78,7 @@ class DownloadWorker(QThread):
 
 
     def __del__(self):
+        self.terminate()
         self.wait()
 
 
