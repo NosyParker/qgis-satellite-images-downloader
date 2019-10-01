@@ -33,15 +33,16 @@ from .resources import *
 from .satellite_images_downloader_dialog import SatelliteImagesDownloaderDialog
 import os
 import json
-import satsearch
+
 import datetime
 from time import gmtime, strftime
-from satsearch.search import Search, Query
-from satsearch.scene import Scenes
+
+from satsearch import Search
+
 import requests
 import logging
 from .globals import SATELLITES, KEYWORD_ARGS, AOI_COORDINATES
-from .workers import DownloadWorker
+from .workers import DownloadWorker, FindWorker
 from .helpers import CaptureCoordinates
 
 KWARGS = KEYWORD_ARGS
@@ -239,7 +240,7 @@ class SatelliteImagesDownloader:
 
     def stop_worker(self):
         """
-        Вспомогательная функция для остановки работы воркера (потока)
+        Вспомогательная функция для остановки работы воркера-загрузчика
         """
         self.worker.stop()
         self.worker.quit()
@@ -251,12 +252,55 @@ class SatelliteImagesDownloader:
         self.dlg.downloadScenesButton.setEnabled(True)
 
 
+    def stop_finder(self):
+        """
+        Вспомогательная функция для остановки работы воркера-поисковика
+        """
+        self.finder.stop()
+        self.finder.quit()
+        self.finder.wait()
+        self.finder.terminate()
+        del self.finder
+
+
     def interrupt_worker(self):
 
         self.worker.stop()
         self.worker.terminate()
         del self.worker
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" + " Загрузка была прервана!")
+        self.dlg.stopDownloadingButton.setEnabled(False)
+        self.dlg.interruptingButton.setEnabled(False)
+        self.dlg.downloadScenesButton.setEnabled(True)
+
+
+    """ Ряд методов-коллбэков на эвенты от воркеров """
+    def work_is_starting(self, data):
+        """ Общий коллбэк на эвент начала работы воркеров """
+        self.dlg.logWindow.appendPlainText(data)
+
+
+    def download_ready(self, data):
+        """ Коллбэк на эвент загрузки 1 файла """
+        self.dlg.logWindow.appendPlainText(data)
+
+
+    def files_are_found(self, files_count, searching_collection_name):
+        """
+        Коллбэк на эвент завершения запроса на определение количества снимков при заданных параметрах
+        """
+        if searching_collection_name == 'landsat-8-l1':
+            info_str = f"{str(files_count)} снимков Landsat-8 найдено"
+        else:
+            info_str = f"{str(files_count)} снимков Sentinel-2 найдено"
+        self.dlg.logWindow.appendPlainText(f"[{str(datetime.datetime.now().strftime ('%H:%M:%S'))}] {info_str}")
+
+
+    def work_ready(self, data):
+        """ 
+        Коллбэк на эвент завершений всего процесса загрузки снимков
+        """
+        self.dlg.logWindow.appendPlainText(data)
         self.dlg.stopDownloadingButton.setEnabled(False)
         self.dlg.interruptingButton.setEnabled(False)
         self.dlg.downloadScenesButton.setEnabled(True)
@@ -320,7 +364,6 @@ class SatelliteImagesDownloader:
             self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Необходимо выбрать базовый слой для выделения области интереса!")
 
 
-
     def setup_coordinates(self):
         """
         Устанавливает координаты известной области.
@@ -340,38 +383,25 @@ class SatelliteImagesDownloader:
             except:
                 self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Проверьте правильность ввода координаты! Точка не была установлена.")
 
-            
-
 
     def clear_coordinates(self):
         if AOI_COORDINATES:
             self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " + "Координаты были сброшены")
         self.capturer.cancelCoordinates()
-        # self.dlg.logWindow.appendPlainText("")
 
 
     def checking_landsat8_category(self):
         """
         Проверяет какие категории снимков Landsat-8 были выбраны.
         """
+        tiers = []
         if self.dlg.categoryT1_checkBox.isChecked():
-            
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "T1,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "T1,"
+            tiers.append("T1")
         if self.dlg.categoryT2_checkBox.isChecked():
-
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "T2,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "T2,"
+            tiers.append("T2")
         if self.dlg.categoryRT_checkBox.isChecked():
-
-            if "COLLECTION_CATEGORY" in KWARGS:
-                KWARGS["COLLECTION_CATEGORY"] += "RT,"
-            else:
-                KWARGS["COLLECTION_CATEGORY"] = "RT,"
+            tiers.append("RT")
+        return tiers
 
 
     def check_landsat8_filekeys(self):
@@ -393,16 +423,16 @@ class SatelliteImagesDownloader:
         Проверяет какие каналы (файлы) к загрузке были выбраны для Sentinel-2.
         """
         if self.dlg.S2B8A_checkBox.isChecked():
-            FILEKEYS.append("8A")
+            FILEKEYS.append("B8A")
 
         for i in range(1,12):
             t = "self.dlg.S2B" + str(i) + "_checkBox.isChecked()"
             cast_t = eval(t)
             if cast_t:
                 if i<10:
-                    FILEKEYS.append("0"+str(i))
+                    FILEKEYS.append("B0"+str(i))
                 else:
-                    FILEKEYS.append("1"+str(i))
+                    FILEKEYS.append("B1"+str(i))
 
 
     def clearing_landsat8_category(self):
@@ -421,51 +451,70 @@ class SatelliteImagesDownloader:
 
     def finding_scenes(self):
         """
-        Делает запрос по АПИ на количество снимков согласно выбранным параметрам.
+        Делает запрос по API на количество снимков согласно выбранным параметрам.
         """
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
+
+        searching_collection_name = None
+
+        if SATTELITE_NAME == "Landsat-8":
+            searching_collection_name = "landsat-8-l1"
+        elif SATTELITE_NAME == "Sentinel-2":
+            searching_collection_name = "sentinel-2-l1c"
+
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        KWARGS["satellite_name"] = SATTELITE_NAME
-        KWARGS["cloud_from"] = CLOUD_FROM
-        KWARGS["cloud_to"] = CLOUD_TO
-        KWARGS["date_from"] = DATE_FROM
-        KWARGS["date_to"] = DATE_TO
-        KWARGS["intersects"] = self.buildGeoJSON()
+        intersects_geojson_data = self.buildGeoJSON()
+        date_param_string = f"{DATE_FROM}/{DATE_TO}"
 
+        query = {
+            'eo:cloud_cover': {
+                'lte' : CLOUD_TO,
+                'gte' : CLOUD_FROM
+            }
+        }
 
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
-            self.checking_landsat8_category()
+        if searching_collection_name:
+            query['collection'] = {'eq' : searching_collection_name}
 
-        self.iface.messageBar().pushInfo("Message", "Выполняется поиск")
+        # is really shit-shit code,
+        # но ребятишки, сделавшие API, видимо не подумали о том, 
+        # что может потребоваться передавать параметры через OR (||)
+        landsat_queries =[]
+        if searching_collection_name == "landsat-8-l1":
+            landsat_tiers = self.checking_landsat8_category()
+            for tier in landsat_tiers:
+                query['landsat:tier'] = {"eq" : tier}
+                landsat_queries.append(query.copy())
+            
+        # инициализируем воркера-поисковика
+        # снабжаем его всеми необходимыми параметрами
+        if searching_collection_name == "landsat-8-l1" and len(landsat_queries) >= 2:
+            self.finder = FindWorker(intersects=intersects_geojson_data, time=date_param_string, query=landsat_queries)
+        else:
+            self.finder = FindWorker(intersects=intersects_geojson_data, time=date_param_string, query=query)
 
-        simple_query_result = Query(**KWARGS).found()
-        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "] " +str(simple_query_result)+" снимков найдено")
+        # вешаем коллбэки на его эвенты
+        self.finder.search_is_started.connect(self.work_is_starting)
+        self.finder.files_are_found.connect(self.files_are_found)
 
-        self.clearing_landsat8_category()
+        # запускаем поисковик и ждем результат
+        try:
+            self.finder.start()
+        except Exception as e:
+            self.dlg.logWindow.appendPlainText(str(e))
+            self.stop_finder()
 
-        self.iface.messageBar().pushSuccess("Message", "Снимки найдены")
-
-
-    def download_ready(self, data):
-        self.dlg.logWindow.appendPlainText(data)
-
-
-
-
-    def work_ready(self, data):
-        self.dlg.logWindow.appendPlainText(data)
-        self.dlg.stopDownloadingButton.setEnabled(False)
-        self.dlg.interruptingButton.setEnabled(False)
-        self.dlg.downloadScenesButton.setEnabled(True)
 
 
 
     def downloading_scenes(self):
-        
+        """
+        Делает запрос по API на загрузку снимков на основе выбранных параметров.
+        """
         self.clearing_landsat8_category()
         self.clear_filekeys()
 
@@ -474,34 +523,60 @@ class SatelliteImagesDownloader:
             return None
 
         SATTELITE_NAME = str(self.dlg.satelliteName_comboBox.currentText())
+
+        searching_collection_name = None
+
+        if SATTELITE_NAME == "Landsat-8":
+            searching_collection_name = "landsat-8-l1"
+        elif SATTELITE_NAME == "Sentinel-2":
+            searching_collection_name = "sentinel-2-l1c"
+
         CLOUD_FROM = str(self.dlg.cloudFrom_spinBox.value())
         CLOUD_TO = str(self.dlg.cloudTo_spinBox.value())
         DATE_FROM = str(self.dlg.dateEdit.date().toPyDate())
         DATE_TO = str(self.dlg.dateEdit_2.date().toPyDate())
 
-        KWARGS["satellite_name"] = SATTELITE_NAME
-        KWARGS["cloud_from"] = CLOUD_FROM
-        KWARGS["cloud_to"] = CLOUD_TO
-        KWARGS["date_from"] = DATE_FROM
-        KWARGS["date_to"] = DATE_TO
-        KWARGS["intersects"] = self.buildGeoJSON()
+        query = {
+            'eo:cloud_cover': {
+                'lte' : CLOUD_TO,
+                'gte' : CLOUD_FROM
+            }
+        }
 
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS":
-            self.checking_landsat8_category()
+        if searching_collection_name:
+            query['collection'] = {'eq' : searching_collection_name}
+
+        intersects_geojson_data = self.buildGeoJSON()
+
+        date_param_string = f"{DATE_FROM}/{DATE_TO}"
+        
+        if searching_collection_name == "landsat-8-l1":
             self.check_landsat8_filekeys()
-        elif SATTELITE_NAME == "Sentinel-2":
+        elif searching_collection_name == "sentinel-2-l1c":
             self.check_sentinel2_filekeys()
 
-        scenes_query_result = Query(**KWARGS).scenes()
-        scenes = Scenes(scenes_query_result)
+        items = []
+        if searching_collection_name == "landsat-8-l1":
+            landsat_tiers = self.checking_landsat8_category()
+            for tier in landsat_tiers: 
+                query['landsat:tier'] = {"eq" : tier}
 
-        if SATTELITE_NAME == "Landsat-8 OLI/TIRS" and self.dlg.googleSourceCheckBox.isChecked():
-            for scene in scenes.scenes:
-                scene.source = "google"
-        
-        PATH = str(self.dlg.folderPath_lineEdit.text()) + "/"
+                if intersects_geojson_data is not None:
+                    search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+                else:
+                    search = Search(time=date_param_string, query=query)
+                
+                items += search.items()
+        else:
+            if intersects_geojson_data is not None:
+                search = Search(intersects=intersects_geojson_data, time=date_param_string, query=query)
+            else:
+                search = Search(time=date_param_string, query=query)
+            items = search.items()
+
+        PATH = str(self.dlg.folderPath_lineEdit.text())
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Файлы будут загружены в директорию: " + PATH)
-        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(scenes)))
+        self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" К загрузке представлено сцен - " + str(len(items)))
         self.dlg.logWindow.appendPlainText("["+str(datetime.datetime.now().strftime ("%H:%M:%S")) + "]" +" Каналы (файлы) к загрузке - " + ", ".join(FILEKEYS))
 
         self.dlg.stopDownloadingButton.setEnabled(True)
@@ -509,9 +584,10 @@ class SatelliteImagesDownloader:
         self.dlg.downloadScenesButton.setEnabled(False)
 
         self.worker = DownloadWorker()
-        self.worker.scenes = scenes.scenes
+        self.worker.scenes = items
         self.worker.filekeys = FILEKEYS
         self.worker.path = PATH
+        self.worker.work_started.connect(self.work_is_starting)
         self.worker.data_downloaded.connect(self.download_ready)
         self.worker.work_finished.connect(self.work_ready)
 
